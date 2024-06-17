@@ -1,6 +1,5 @@
 package org.example.Modelo;
 
-
 public enum Ubicaciones {
     LOS_ANGELES(5000),
     CURANILAHUE(1200),
@@ -16,5 +15,4 @@ public enum Ubicaciones {
     public int getPrecio() {
         return this.precio;
     }
-
 }
