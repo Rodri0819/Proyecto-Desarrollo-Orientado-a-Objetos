@@ -4,7 +4,8 @@ public enum Ubicaciones {
     LOS_ANGELES(5000),
     CURANILAHUE(1200),
     SANTIAGO(13000),
-    TALCA(1500);
+    TALCA(1500),
+    CHILLAN(3000);
 
     private final int precio;
 

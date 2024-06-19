@@ -12,12 +12,11 @@ public class Main {
     public static void main(String[] args) {
         // Crear algunos datos de ejemplo
         List<Bus> buses = new ArrayList<>();
-        buses.add(new SingleBus(10, "Bus1"));
-        buses.add(new DoubleBus(20, "Bus2"));
+
+        Bus deunpiso = new SingleBus(10, "342342");
 
         List<Ruta> rutas = new ArrayList<>();
-        rutas.add(new Ruta("Santiago", Ubicaciones.TALCA, "08:00 AM", buses));
-        rutas.add(new Ruta("Santiago", Ubicaciones.CURANILAHUE, "10:00 AM", buses));
+
 
         Cliente cliente = new Cliente("Juan", "Perez", "12345678-9", "juan.perez@example.com");
 
@@ -25,7 +24,7 @@ public class Main {
         List<LocalTime> horarios = Horario.generarHorarios(LocalTime.of(8, 0), LocalTime.of(22, 0), 30);
 
         // Instanciar la vista con horarios
-        VentanaPrincipal ventanaPrincipal = new VentanaPrincipal(horarios);
+        VentanaPrincipal ventanaPrincipal = new VentanaPrincipal(horarios, buses);
 
         // Instanciar el controlador con el modelo y la vista
         Controlador controlador = new Controlador(rutas, cliente, ventanaPrincipal);

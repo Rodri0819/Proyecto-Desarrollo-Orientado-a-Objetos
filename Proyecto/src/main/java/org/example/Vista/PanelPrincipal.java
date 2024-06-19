@@ -1,5 +1,7 @@
 package org.example.Vista;
 
+import org.example.Modelo.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalTime;
@@ -9,18 +11,22 @@ public class PanelPrincipal extends JPanel {
     private PanelCliente panelCliente;
     private PanelAdmin panelAdmin;
 
-    public PanelPrincipal(List<LocalTime> horarios) {
-        configurarPanel(horarios);
+    public PanelPrincipal(List<LocalTime> horarios, List<Bus> buses) {
+        configurarPanel(horarios, buses);
     }
 
-    private void configurarPanel(List<LocalTime> horarios) {
-        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+    private void configurarPanel(List<LocalTime> horarios, List<Bus> buses) {
+        this.setLayout(null); // Establecer layout nulo
         this.setBackground(Color.gray);
 
         panelCliente = new PanelCliente();
-        panelAdmin = new PanelAdmin(horarios);
+        panelAdmin = new PanelAdmin(horarios, buses);
 
+        // Establecer tamaño y posición del panelCliente
+        panelCliente.setBounds(0, 0, 600, 800);
         this.add(panelCliente);
+        // Establecer tamaño y posición del panelAdmin
+        panelAdmin.setBounds(600, 0, 600, 800);
         this.add(panelAdmin);
     }
 

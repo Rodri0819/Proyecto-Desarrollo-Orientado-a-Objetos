@@ -1,25 +1,29 @@
 package org.example.Modelo;
 
+import java.util.Date;
 import java.util.List;
 
 public class Ruta {
-    private String origen;
+    private Ubicaciones origen;
     private Ubicaciones destino;
-    private String horario;
-    private List<Bus> buses;
+    private Date fecha;
+    private List<String> horas;
+    private String id;
+    private Bus bus;
 
-    public Ruta(String origen, Ubicaciones destino, String horario, List<Bus> buses) {
+    public Ruta(Ubicaciones origen, Ubicaciones destino, Date fecha, List<String> horas, Bus bus) {
         this.origen = origen;
         this.destino = destino;
-        this.horario = horario;
-        this.buses = buses;
+        this.fecha = fecha;
+        this.horas = horas;
+        this.bus = bus;
     }
 
-    public String getOrigen() {
+    public Ubicaciones getOrigen() {
         return origen;
     }
 
-    public void setOrigen(String origen) {
+    public void setOrigen(Ubicaciones origen) {
         this.origen = origen;
     }
 
@@ -31,23 +35,31 @@ public class Ruta {
         this.destino = destino;
     }
 
-    public String getHorario() {
-        return horario;
+    public Date getFecha() {
+        return fecha;
     }
 
-    public void setHorario(String horario) {
-        this.horario = horario;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
-    public List<Bus> getBuses() {
-        return buses;
+    public List<String> getHoras() {
+        return horas;
     }
 
-    public void setBuses(List<Bus> buses) {
-        this.buses = buses;
+    public void setHoras(List<String> horas) {
+        this.horas = horas;
     }
 
     public int getPrecioDestino() {
         return destino.getPrecio();
+    }
+
+    public Bus getBus() {
+        return bus;
+    }
+
+    public void setBus(Bus bus) {
+        this.bus = bus;
     }
 }

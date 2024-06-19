@@ -26,7 +26,6 @@ public class Controlador {
             public void actionPerformed(ActionEvent e) {
                 LocalTime horarioSeleccionado = ventanaPrincipal.getPanelAdmin().getHorarioSeleccionado();
                 System.out.println("Horario seleccionado: " + horarioSeleccionado);
-                // Aquí puedes añadir lógica para manejar la selección de horarios
             }
         });
     }
