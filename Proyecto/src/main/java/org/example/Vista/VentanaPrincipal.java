@@ -23,6 +23,8 @@ public class VentanaPrincipal extends JFrame {
         panelPrincipal = new PanelPrincipal(horarios, buses);
         this.add(panelPrincipal, BorderLayout.CENTER);
 
+        // Configurar la ventana para que se abra en modo de ventana completa
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
     }
 

@@ -1,33 +1,53 @@
 package org.example.Vista;
 
-import org.example.Modelo.Ruta;
-import org.example.Modelo.Ubicaciones;
+import com.toedter.calendar.JDateChooser;
+import org.example.Modelo.*;
 import com.toedter.calendar.JCalendar;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class PanelCliente extends JPanel {
     private JPanel desde, hasta, dia;
     private JComboBox<Ubicaciones> comboBoxDesde, comboBoxHasta;
     private JCalendar calendario;
     private JButton botonVolver;
-    private JPanel panel1, panel2;
+    private JPanel panel1, panel2, panel3;
+    private BaseDeDatos baseDeDatos;
+    private JTable tablaRutas;
+    private JScrollPane scrollPaneRutas;
+    private String panelActual;
+    private Ruta rutaSeleccionada;
+    private List<Ruta> rutas;
+    private JDateChooser dateChooser;
+
 
     public PanelCliente() {
+        baseDeDatos = new BaseDeDatos();
         configurarPanel();
         agregarPanel1();
         agregarPanel2();
+        agregarPanel3();
         mostrarPanel1();
     }
 
     private void configurarPanel() {
-        // Configurar el panel principal con un CardLayout para alternar entre paneles
         setBackground(new Color(64, 164, 107));
-        setPreferredSize(new Dimension(600, 700));
-        setLayout(new CardLayout()); // Usar CardLayout para alternar entre subpaneles
+        setPreferredSize(new Dimension(600, 900));
+        setLayout(new CardLayout());
+        panelActual = "Panel1"; // Inicializa el estado actual del panel
     }
 
     private void agregarPanel1() {
@@ -37,12 +57,22 @@ public class PanelCliente extends JPanel {
 
         JLabel pasaje = new JLabel("Panel Cliente");
         pasaje.setFont(new Font("Arial", Font.BOLD, 20));
-        pasaje.setBounds(200, 10, 200, 30);
+        pasaje.setBounds(335, 10, 500, 30);
         panel1.add(pasaje);
 
+        agregarPanelDesde();
+        agregarPanelHasta();
+        agregarPanelDia();
+
+        agregarBotonItinerario(panel1);
+
+        add(panel1, "Panel1");
+    }
+
+    private void agregarPanelDesde() {
         desde = new JPanel();
         desde.setLayout(null);
-        desde.setBounds(8, 50, 570, 150);
+        desde.setBounds(15, 50, 570, 150);
         desde.setBackground(new Color(157, 218, 184));
         panel1.add(desde);
 
@@ -54,10 +84,12 @@ public class PanelCliente extends JPanel {
         comboBoxDesde = new JComboBox<>(Ubicaciones.values());
         comboBoxDesde.setBounds(10, 50, 200, 30);
         desde.add(comboBoxDesde);
+    }
 
+    private void agregarPanelHasta() {
         hasta = new JPanel();
         hasta.setLayout(null);
-        hasta.setBounds(8, 210, 570, 150);
+        hasta.setBounds(15, 210, 570, 150);
         hasta.setBackground(new Color(225, 122, 122));
         panel1.add(hasta);
 
@@ -69,10 +101,12 @@ public class PanelCliente extends JPanel {
         comboBoxHasta = new JComboBox<>(Ubicaciones.values());
         comboBoxHasta.setBounds(10, 50, 200, 30);
         hasta.add(comboBoxHasta);
+    }
 
+    private void agregarPanelDia() {
         dia = new JPanel();
         dia.setLayout(null);
-        dia.setBounds(8, 370, 570, 300);
+        dia.setBounds(15, 370, 570, 300);
         dia.setBackground(new Color(162, 113, 194));
         panel1.add(dia);
 
@@ -81,29 +115,82 @@ public class PanelCliente extends JPanel {
         labelDia.setBounds(10, 10, 200, 30);
         dia.add(labelDia);
 
-        calendario = new JCalendar();
-        calendario.setBounds(80, 50, 400, 200);
-        dia.add(calendario);
-
-        agregarBotonItinerario(panel1);
-
-        add(panel1, "Panel1");
+        dateChooser = new JDateChooser();
+        dateChooser.setBounds(10, 50, 200, 30);
+        dateChooser.setMinSelectableDate(new Date());
+        dia.add(dateChooser);
     }
+
+
+    public Date getFechaSeleccionada() {
+        return dateChooser.getDate();
+    }
+
 
     private void agregarPanel2() {
         panel2 = new JPanel();
         panel2.setLayout(null);
-        panel2.setBackground(new Color(236, 0, 0));
+        panel2.setBackground(new Color(189, 105, 105));
+
+        JLabel labelRutas = new JLabel("Rutas Disponibles", SwingConstants.CENTER);
+        labelRutas.setFont(new Font("Arial", Font.BOLD, 20));
+        labelRutas.setBounds(100, 10, 600, 30);
+        panel2.add(labelRutas);
+
+        tablaRutas = new JTable();
+        scrollPaneRutas = new JScrollPane(tablaRutas);
+        scrollPaneRutas.setBounds(100, 50, 600, 600);
+        panel2.add(scrollPaneRutas);
 
         agregarBotonVolver(panel2);
 
         add(panel2, "Panel2");
+
+        tablaRutas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int fila = tablaRutas.getSelectedRow();
+                    if (fila != -1) {
+                        rutaSeleccionada = rutas.get(fila); // Guardar la ruta seleccionada
+                        mostrarPanel3();
+                    }
+                }
+            }
+        });
+    }
+
+    private void agregarPanel3() {
+        panel3 = new JPanel();
+        panel3.setLayout(null);
+        panel3.setBackground(new Color(173, 216, 230));
+
+        JLabel labelDetalle = new JLabel("Asientos Disponibles", SwingConstants.CENTER);
+        labelDetalle.setFont(new Font("Arial", Font.BOLD, 19));
+        labelDetalle.setOpaque(true);
+        labelDetalle.setBackground(new Color(0, 0, 255));
+        labelDetalle.setForeground(Color.WHITE);
+        labelDetalle.setBounds(100, 10, 600, 30);
+        panel3.add(labelDetalle);
+
+        JButton botonVolver = new JButton("Volver");
+        botonVolver.setFont(new Font("Arial", Font.BOLD, 20));
+        botonVolver.setBounds(288, 700, 200, 30);
+        botonVolver.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel2();
+            }
+        });
+        panel3.add(botonVolver);
+
+        add(panel3, "Panel3");
     }
 
     private void agregarBotonItinerario(JPanel panel) {
         JButton itinerario = new JButton("Revisar Itinerario");
         itinerario.setFont(new Font("Arial", Font.BOLD, 20));
-        itinerario.setBounds(180, 700, 200, 30);
+        itinerario.setBounds(288, 700, 200, 30);
         panel.add(itinerario);
 
         itinerario.addActionListener(new ActionListener() {
@@ -111,13 +198,18 @@ public class PanelCliente extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 Ubicaciones desdeUbicacion = getUbicacionDesde();
                 Ubicaciones hastaUbicacion = getUbicacionHasta();
-                java.util.Date fechaSeleccionada = getFechaSeleccionada();
+                Date fechaSeleccionada = getFechaSeleccionada();
 
                 if (desdeUbicacion == hastaUbicacion) {
-                    JOptionPane.showMessageDialog(PanelCliente.this, "No puedes viajar hacia donde estás.", "Error", JOptionPane.ERROR_MESSAGE
-                    );
+                    JOptionPane.showMessageDialog(PanelCliente.this, "No puedes viajar hacia donde estás.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    mostrarPanel2();
+                    rutas = baseDeDatos.obtenerRutas(desdeUbicacion, hastaUbicacion, fechaSeleccionada);
+                    if (!rutas.isEmpty()) {
+                        mostrarRutas(rutas);
+                        mostrarPanel2();
+                    } else {
+                        JOptionPane.showMessageDialog(PanelCliente.this, "No se encontraron rutas para la selección.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -126,27 +218,71 @@ public class PanelCliente extends JPanel {
     private void agregarBotonVolver(JPanel panel) {
         botonVolver = new JButton("Volver");
         botonVolver.setFont(new Font("Arial", Font.BOLD, 20));
-        botonVolver.setBounds(180, 700, 200, 30);
+        botonVolver.setBounds(288, 700, 200, 30);
         panel.add(botonVolver);
 
         botonVolver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mostrarPanel1();
+                if (panelActual.equals("Panel3")) {
+                    mostrarPanel2();
+                } else if (panelActual.equals("Panel2")) {
+                    mostrarPanel1();
+                }
             }
         });
     }
 
-    // Métodos para mostrar paneles específicos usando CardLayout
     private void mostrarPanel1() {
         CardLayout cl = (CardLayout) getLayout();
         cl.show(this, "Panel1");
+        panelActual = "Panel1";
     }
 
     private void mostrarPanel2() {
         CardLayout cl = (CardLayout) getLayout();
         cl.show(this, "Panel2");
+        panelActual = "Panel2";
     }
+
+    private void mostrarPanel3() {
+        if (rutaSeleccionada != null) {
+            List<Asiento> asientos = rutaSeleccionada.getAsientos();
+            Bus bus = rutaSeleccionada.getBus(); // Obtener el objeto Bus
+            Asientos asientosPanel = new Asientos(asientos, bus); // Pasar la lista de asientos y el objeto Bus
+            panel3.removeAll();
+            asientosPanel.setBounds(100, 50, 600, 600);
+            asientosPanel.setBackground(new Color(173, 216, 230));
+            panel3.add(asientosPanel);
+
+            JLabel labelDetalle = new JLabel("Asientos Disponibles", SwingConstants.CENTER);
+            labelDetalle.setFont(new Font("Arial", Font.BOLD, 19));
+            labelDetalle.setOpaque(true);
+            labelDetalle.setBackground(new Color(0, 0, 255));
+            labelDetalle.setForeground(Color.WHITE);
+            labelDetalle.setBounds(100, 10, 600, 30);
+            panel3.add(labelDetalle);
+
+            JButton botonVolver = new JButton("Volver");
+            botonVolver.setFont(new Font("Arial", Font.BOLD, 20));
+            botonVolver.setBounds(288, 700, 200, 30);
+            botonVolver.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mostrarPanel2();
+                }
+            });
+            panel3.add(botonVolver);
+
+            revalidate();
+            repaint();
+        }
+
+        CardLayout cl = (CardLayout) getLayout();
+        cl.show(this, "Panel3");
+        panelActual = "Panel3";
+    }
+
 
     public Ubicaciones getUbicacionDesde() {
         return (Ubicaciones) comboBoxDesde.getSelectedItem();
@@ -156,7 +292,61 @@ public class PanelCliente extends JPanel {
         return (Ubicaciones) comboBoxHasta.getSelectedItem();
     }
 
-    public java.util.Date getFechaSeleccionada() {
-        return calendario.getDate();
+
+    private void mostrarRutas(List<Ruta> rutas) {
+        String[] columnNames = {"Origen", "Destino", "Fecha", "Hora", "Bus"};
+        Object[][] data = new Object[rutas.size()][5];
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < rutas.size(); i++) {
+            Ruta ruta = rutas.get(i);
+            data[i][0] = ruta.getOrigen();
+            data[i][1] = ruta.getDestino();
+            data[i][2] = dateFormat.format(ruta.getFecha());
+            data[i][3] = ruta.getHora();
+            data[i][4] = ruta.getBus().getId();
+        }
+
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        tablaRutas.setModel(model);
+        tablaRutas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tablaRutas.setRowSelectionAllowed(true);
+        tablaRutas.setColumnSelectionAllowed(false);
+
+        TableColumnModel columnModel = tablaRutas.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(100);
+        columnModel.getColumn(1).setPreferredWidth(100);
+        columnModel.getColumn(2).setPreferredWidth(100);
+        columnModel.getColumn(3).setPreferredWidth(50);
+        columnModel.getColumn(4).setPreferredWidth(50);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        for (int i = 0; i < tablaRutas.getColumnCount(); i++) {
+            tablaRutas.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        tablaRutas.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (row % 2 == 0) {
+                    setBackground(Color.LIGHT_GRAY);
+                } else {
+                    setBackground(Color.WHITE);
+                }
+                if (isSelected) {
+                    setBackground(Color.CYAN);
+                }
+                return this;
+            }
+        });
     }
 }

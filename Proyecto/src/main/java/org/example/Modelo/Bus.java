@@ -44,9 +44,12 @@ public abstract class Bus {
     public void reservarAsiento(int numero) {
         Asiento asiento = getAsiento(numero);
         if (asiento.isEstado()) {
+            System.out.println("Reserva existosa");
+        }
+        else {
             throw new IllegalStateException("El asiento " + numero + " ya está reservado.");
         }
-        asiento.setEstado(true);
+        asiento.setEstado(false);
     }
 
     public void liberarAsiento(int numero) {

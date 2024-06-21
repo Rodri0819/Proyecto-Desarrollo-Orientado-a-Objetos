@@ -16,28 +16,28 @@ public class PanelAdmin extends JPanel {
 
     public PanelAdmin(List<LocalTime> horarios, List<Bus> buses) {
         setLayout(null); // Establecer layout nulo
-        configurarPanel2(horarios, buses);
+        configurarPanel(horarios, buses);
     }
 
-    private void configurarPanel2(List<LocalTime> horarios, List<Bus> buses) {
+    private void configurarPanel(List<LocalTime> horarios, List<Bus> buses) {
         setBackground(new Color(114, 206, 206));
         setPreferredSize(new Dimension(600, 800));
 
         crearBus = new JPanel();
         crearBus.setLayout(null);
-        crearBus.setBounds(8, 50, 570, 200); // Ajusta según sea necesario
+        crearBus.setBounds(80, 50, 570, 200); // Ajusta según sea necesario
         crearBus.setBackground(new Color(200, 200, 200));
         add(crearBus);
 
         registroPasaje = new JPanel();
         registroPasaje.setLayout(null);
-        registroPasaje.setBounds(8, 260, 570, 200); // Ajusta según sea necesario
+        registroPasaje.setBounds(80, 260, 570, 200); // Ajusta según sea necesario
         registroPasaje.setBackground(new Color(200, 200, 200));
         add(registroPasaje);
 
         informeBus = new JPanel();
         informeBus.setLayout(null);
-        informeBus.setBounds(8, 470, 570, 200); // Ajusta según sea necesario
+        informeBus.setBounds(80, 470, 570, 200); // Ajusta según sea necesario
         informeBus.setBackground(new Color(200, 200, 200));
         add(informeBus);
 
@@ -50,7 +50,7 @@ public class PanelAdmin extends JPanel {
     private void agregarLabel() {
         JLabel panel = new JLabel("Panel Administrador");
         panel.setFont(new Font("Arial", Font.BOLD, 20));
-        panel.setBounds(200, 10, 200, 30);
+        panel.setBounds(250, 10, 200, 30);
         this.add(panel); // Agregar el JLabel directamente al PanelAdmin
 
         JLabel recorridos = new JLabel("Crear recorrido");

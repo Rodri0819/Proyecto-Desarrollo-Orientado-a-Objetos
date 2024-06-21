@@ -1,7 +1,6 @@
 package org.example.Modelo;
 
 public class DoubleBus extends Bus {
-
     public DoubleBus(int capacidad, String id) {
         super(capacidad, id);
         int mitadCapacidad = capacidad / 2;
@@ -12,7 +11,6 @@ public class DoubleBus extends Bus {
         for (int i = mitadCapacidad + 1; i <= capacidad; i++) {
             agregarAsiento(new Asiento(i, "Semi Cama", true));
         }
-
     }
 
     @Override

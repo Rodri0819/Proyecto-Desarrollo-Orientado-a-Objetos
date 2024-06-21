@@ -17,16 +17,16 @@ public class PanelPrincipal extends JPanel {
 
     private void configurarPanel(List<LocalTime> horarios, List<Bus> buses) {
         this.setLayout(null); // Establecer layout nulo
-        this.setBackground(Color.gray);
 
         panelCliente = new PanelCliente();
         panelAdmin = new PanelAdmin(horarios, buses);
 
         // Establecer tamaño y posición del panelCliente
-        panelCliente.setBounds(0, 0, 600, 800);
+        panelCliente.setBounds(0, 0, 800, 800);
         this.add(panelCliente);
+
         // Establecer tamaño y posición del panelAdmin
-        panelAdmin.setBounds(600, 0, 600, 800);
+        panelAdmin.setBounds(800, 0, 800, 800);
         this.add(panelAdmin);
     }
 
