@@ -1,9 +1,8 @@
 package org.example.Vista;
 
+import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import org.example.Modelo.*;
-import com.toedter.calendar.JCalendar;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -13,18 +12,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import java.util.Date;
 
 public class PanelCliente extends JPanel {
     private JPanel desde, hasta, dia;
     private JComboBox<Ubicaciones> comboBoxDesde, comboBoxHasta;
     private JCalendar calendario;
-    private JButton botonVolver;
-    private JPanel panel1, panel2, panel3;
+    private JPanel panel1, panel2, panel3, panel4;
     private BaseDeDatos baseDeDatos;
     private JTable tablaRutas;
     private JScrollPane scrollPaneRutas;
@@ -32,7 +28,19 @@ public class PanelCliente extends JPanel {
     private Ruta rutaSeleccionada;
     private List<Ruta> rutas;
     private JDateChooser dateChooser;
+    private JLabel precioLabel, TipoAsientoLabel;
+    private int precio;
 
+
+    // Campos para el formulario de cliente
+    private JTextField nombreField;
+    private JTextField apellidoField;
+    private JTextField rutField;
+    private JTextField emailField;
+    private JButton guardarButton;
+    private Asiento asientoSeleccionado;
+    private JButton botonConfirmarReserva;
+    private JButton botonVolver;
 
     public PanelCliente() {
         baseDeDatos = new BaseDeDatos();
@@ -40,6 +48,7 @@ public class PanelCliente extends JPanel {
         agregarPanel1();
         agregarPanel2();
         agregarPanel3();
+        agregarPanel4();
         mostrarPanel1();
     }
 
@@ -121,11 +130,9 @@ public class PanelCliente extends JPanel {
         dia.add(dateChooser);
     }
 
-
     public Date getFechaSeleccionada() {
         return dateChooser.getDate();
     }
-
 
     private void agregarPanel2() {
         panel2 = new JPanel();
@@ -142,7 +149,16 @@ public class PanelCliente extends JPanel {
         scrollPaneRutas.setBounds(100, 50, 600, 600);
         panel2.add(scrollPaneRutas);
 
-        agregarBotonVolver(panel2);
+        JButton botonVolverPanel2 = new JButton("Volver");
+        botonVolverPanel2.setFont(new Font("Arial", Font.BOLD, 20));
+        botonVolverPanel2.setBounds(288, 700, 200, 30);
+        botonVolverPanel2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel1();
+            }
+        });
+        panel2.add(botonVolverPanel2);
 
         add(panel2, "Panel2");
 
@@ -173,18 +189,146 @@ public class PanelCliente extends JPanel {
         labelDetalle.setBounds(100, 10, 600, 30);
         panel3.add(labelDetalle);
 
-        JButton botonVolver = new JButton("Volver");
-        botonVolver.setFont(new Font("Arial", Font.BOLD, 20));
-        botonVolver.setBounds(288, 700, 200, 30);
-        botonVolver.addActionListener(new ActionListener() {
+        JButton botonVolverPanel3 = new JButton("Volver");
+        botonVolverPanel3.setFont(new Font("Arial", Font.BOLD, 20));
+        botonVolverPanel3.setBounds(288, 700, 200, 30);
+        botonVolverPanel3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mostrarPanel2();
             }
         });
-        panel3.add(botonVolver);
+        panel3.add(botonVolverPanel3);
 
         add(panel3, "Panel3");
+    }
+
+    private void agregarPanel4() {
+        panel4 = new JPanel();
+        panel4.setLayout(null);
+        panel4.setBackground(new Color(173, 216, 230));
+
+        JLabel labelReserva = new JLabel("Reserva de Asientos", SwingConstants.CENTER);
+        labelReserva.setFont(new Font("Arial", Font.BOLD, 19));
+        labelReserva.setOpaque(true);
+        labelReserva.setBackground(new Color(0, 0, 255));
+        labelReserva.setForeground(Color.WHITE);
+        labelReserva.setBounds(100, 10, 600, 30);
+        panel4.add(labelReserva);
+
+        JLabel nombreLabel = new JLabel("Nombre:");
+        nombreLabel.setBounds(50, 70, 100, 30);
+        panel4.add(nombreLabel);
+
+        nombreField = new JTextField();
+        nombreField.setBounds(150, 70, 200, 30);
+        panel4.add(nombreField);
+
+        JLabel apellidoLabel = new JLabel("Apellido:");
+        apellidoLabel.setBounds(50, 110, 100, 30);
+        panel4.add(apellidoLabel);
+
+        apellidoField = new JTextField();
+        apellidoField.setBounds(150, 110, 200, 30);
+        panel4.add(apellidoField);
+
+        JLabel rutLabel = new JLabel("RUT:");
+        rutLabel.setBounds(50, 150, 100, 30);
+        panel4.add(rutLabel);
+
+        rutField = new JTextField();
+        rutField.setBounds(150, 150, 200, 30);
+        panel4.add(rutField);
+
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setBounds(50, 190, 100, 30);
+        panel4.add(emailLabel);
+
+        emailField = new JTextField();
+        emailField.setBounds(150, 190, 200, 30);
+        panel4.add(emailField);
+
+        precioLabel = new JLabel("Precio: No seleccionado");
+        precioLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        precioLabel.setBounds(50, 270, 200, 30);
+        panel4.add(precioLabel);
+
+        TipoAsientoLabel = new JLabel("Asiento: No seleccionado");
+        TipoAsientoLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        TipoAsientoLabel.setBounds(50, 300, 200, 30);
+        panel4.add(TipoAsientoLabel);
+
+        botonConfirmarReserva = new JButton("Confirmar Reserva");
+        botonConfirmarReserva.setFont(new Font("Arial", Font.BOLD, 20));
+        botonConfirmarReserva.setBounds(238, 650, 300, 40); // Ajustar el ancho y la altura del botón
+        botonConfirmarReserva.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                confirmarReserva();
+                guardarCliente();
+            }
+        });
+        panel4.add(botonConfirmarReserva);
+
+        JButton botonVolverPanel4 = new JButton("Volver");
+        botonVolverPanel4.setFont(new Font("Arial", Font.BOLD, 20));
+        botonVolverPanel4.setBounds(288, 700, 200, 30);
+        botonVolverPanel4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel3();
+            }
+        });
+        panel4.add(botonVolverPanel4);
+
+        add(panel4, "Panel4");
+    }
+
+
+    public void setAsientoSeleccionado(Asiento asiento) {
+        this.asientoSeleccionado = asiento;
+        calcularPrecio(asiento);
+        actualizarEtiquetas();
+    }
+    private void actualizarEtiquetas() {
+        if (asientoSeleccionado != null) {
+            TipoAsientoLabel.setText("Asiento: " + asientoSeleccionado.getCategoria());
+        }
+    }
+
+    private void calcularPrecio(Asiento asiento) {
+        if (rutaSeleccionada != null) {
+            int precioBase = rutaSeleccionada.getPrecio();
+            int precioAsiento = new RutaFactory(null).calcularPrecioAsiento(asiento.getCategoria());
+            precio = precioBase + precioAsiento;
+            precioLabel.setText("Precio: $" + precio);
+        }
+    }
+
+
+
+    private void guardarCliente() {
+        String nombre = nombreField.getText();
+        String apellido = apellidoField.getText();
+        String rut = rutField.getText();
+        String email = emailField.getText();
+
+        Cliente cliente = new Cliente(nombre, apellido, rut, email);
+        Pasaje pasaje = new Pasaje(rutaSeleccionada, cliente, asientoSeleccionado, "pasajes\\pasaje_" + cliente.getNombre() + "_" + cliente.getApellido() + ".txt");
+        pasaje.generarInforme();
+
+
+    }
+
+    private void confirmarReserva() {
+        if (asientoSeleccionado != null) {
+            asientoSeleccionado.setEstado(false);
+            JOptionPane.showMessageDialog(panel4, "Reserva confirmada.");
+            guardarCliente();
+            mostrarPanel3();
+        } else {
+            JOptionPane.showMessageDialog(panel4, "No se ha seleccionado ningún asiento.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void agregarBotonItinerario(JPanel panel) {
@@ -224,7 +368,9 @@ public class PanelCliente extends JPanel {
         botonVolver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (panelActual.equals("Panel3")) {
+                if (panelActual.equals("Panel4")) {
+                    mostrarPanel3();
+                } else if (panelActual.equals("Panel3")) {
                     mostrarPanel2();
                 } else if (panelActual.equals("Panel2")) {
                     mostrarPanel1();
@@ -249,7 +395,7 @@ public class PanelCliente extends JPanel {
         if (rutaSeleccionada != null) {
             List<Asiento> asientos = rutaSeleccionada.getAsientos();
             Bus bus = rutaSeleccionada.getBus(); // Obtener el objeto Bus
-            Asientos asientosPanel = new Asientos(asientos, bus); // Pasar la lista de asientos y el objeto Bus
+            Asientos asientosPanel = new Asientos(asientos, bus, this); // Pasar la lista de asientos y el objeto Bus
             panel3.removeAll();
             asientosPanel.setBounds(100, 50, 600, 600);
             asientosPanel.setBackground(new Color(173, 216, 230));
@@ -263,16 +409,16 @@ public class PanelCliente extends JPanel {
             labelDetalle.setBounds(100, 10, 600, 30);
             panel3.add(labelDetalle);
 
-            JButton botonVolver = new JButton("Volver");
-            botonVolver.setFont(new Font("Arial", Font.BOLD, 20));
-            botonVolver.setBounds(288, 700, 200, 30);
-            botonVolver.addActionListener(new ActionListener() {
+            JButton botonVolverPanel3 = new JButton("Volver");
+            botonVolverPanel3.setFont(new Font("Arial", Font.BOLD, 20));
+            botonVolverPanel3.setBounds(288, 700, 200, 30);
+            botonVolverPanel3.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     mostrarPanel2();
                 }
             });
-            panel3.add(botonVolver);
+            panel3.add(botonVolverPanel3);
 
             revalidate();
             repaint();
@@ -283,6 +429,11 @@ public class PanelCliente extends JPanel {
         panelActual = "Panel3";
     }
 
+    public void mostrarPanel4() {
+        CardLayout cl = (CardLayout) getLayout();
+        cl.show(this, "Panel4");
+        panelActual = "Panel4";
+    }
 
     public Ubicaciones getUbicacionDesde() {
         return (Ubicaciones) comboBoxDesde.getSelectedItem();
@@ -291,7 +442,6 @@ public class PanelCliente extends JPanel {
     public Ubicaciones getUbicacionHasta() {
         return (Ubicaciones) comboBoxHasta.getSelectedItem();
     }
-
 
     private void mostrarRutas(List<Ruta> rutas) {
         String[] columnNames = {"Origen", "Destino", "Fecha", "Hora", "Bus"};

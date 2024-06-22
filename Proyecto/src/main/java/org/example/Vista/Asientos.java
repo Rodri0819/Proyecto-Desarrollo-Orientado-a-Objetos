@@ -12,10 +12,12 @@ import java.util.List;
 public class Asientos extends JPanel {
     private List<Asiento> asientos;
     private Bus bus;
+    private PanelCliente panelCliente;
 
-    public Asientos(List<Asiento> asientos, Bus bus) {
+    public Asientos(List<Asiento> asientos, Bus bus, PanelCliente panelCliente) {
         this.asientos = asientos;
         this.bus = bus;
+        this.panelCliente = panelCliente;
         setLayout(null);
         actualizarAsientos();
     }
@@ -49,9 +51,12 @@ public class Asientos extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        bus.reservarAsiento(asiento.getNumero());
-                        botonAsiento.setBackground(new Color(0xCE1D1D));
-                        JOptionPane.showMessageDialog(null, "RESERVADO CORRECTAMENTE");
+                        if (asiento.isEstado()) {
+                            panelCliente.setAsientoSeleccionado(asiento);
+                            panelCliente.mostrarPanel4();
+                        } else {
+                            throw new IllegalStateException("El asiento ya está reservado.");
+                        }
                     } catch (IllegalStateException ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }

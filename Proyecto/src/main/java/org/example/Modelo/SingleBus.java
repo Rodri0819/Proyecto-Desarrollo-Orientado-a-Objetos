@@ -8,6 +8,7 @@ public class SingleBus extends Bus {
         }
     }
 
+
     @Override
     public String getId() {
         return super.getId();

@@ -1,0 +1,14 @@
+**Pasaje**
+
+Cliente:  
+RUT: 
+Email: 
+
+Origen: LOS_ANGELES
+Destino: CONCEPCION
+Fecha: 2024-06-21
+Hora: 20:00
+Bus: DXDY-5
+Asiento: 11 (Salón Cama)
+Precio Total: 410000
+
