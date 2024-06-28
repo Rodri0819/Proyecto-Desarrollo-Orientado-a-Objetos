@@ -1,5 +1,6 @@
 package org.example.Modelo;
 
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -7,11 +8,11 @@ public class Ruta {
     private Ubicaciones origen;
     private Ubicaciones destino;
     private Date fecha;
-    private String hora;
+    private LocalTime hora;
     private Bus bus;
     private int precio;
 
-    public Ruta(Ubicaciones origen, Ubicaciones destino, Date fecha, String hora, Bus bus, int precio) {
+    public Ruta(Ubicaciones origen, Ubicaciones destino, Date fecha, LocalTime hora, Bus bus, int precio) {
         this.origen = origen;
         this.destino = destino;
         this.fecha = fecha;
@@ -32,7 +33,7 @@ public class Ruta {
         return fecha;
     }
 
-    public String getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 

@@ -1,0 +1,9 @@
+**Informe de Ruta**
+
+Origen: SANTIAGO
+Destino: CONCEPCION
+Fecha: 2024-06-28
+Hora: 19:33:38.640384200
+Bus: null
+
+Asientos y Pasajeros:

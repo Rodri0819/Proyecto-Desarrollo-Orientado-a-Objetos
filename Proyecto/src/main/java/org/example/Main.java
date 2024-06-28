@@ -10,11 +10,14 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        // Crear instancia de BaseDeDatos
-        BaseDeDatos baseDeDatos = new BaseDeDatos();
+        // Obtener la única instancia de BaseDeDatos usando el patrón Singleton
+        BaseDeDatos baseDeDatos = BaseDeDatos.getInstance();
         List<Bus> buses = baseDeDatos.getBuses(); // Obtener buses desde BaseDeDatos
 
-        List<Ruta> rutas = baseDeDatos.obtenerRutas(Ubicaciones.LOS_ANGELES, Ubicaciones.SANTIAGO, new Date());
+        // Proporcionar una fecha específica para la búsqueda de rutas
+        Date fechaSeleccionada = new Date(); // Por ejemplo, la fecha de hoy
+
+        List<Ruta> rutas = baseDeDatos.obtenerRutas(Ubicaciones.LOS_ANGELES, Ubicaciones.SANTIAGO, fechaSeleccionada);
 
         Cliente cliente = new Cliente("Juan", "Perez", "12345678-9", "juan.perez@example.com");
 

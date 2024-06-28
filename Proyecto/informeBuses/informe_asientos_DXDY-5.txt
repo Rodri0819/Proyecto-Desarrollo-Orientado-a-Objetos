@@ -1,0 +1,123 @@
+**Informe de Asientos para el Bus ID: DXDY-5**
+
+Asientos y Pasajeros:
+Asiento: 1 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 2 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 3 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 4 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 5 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 6 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 7 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 8 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 9 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 10 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 11 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 12 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 13 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 14 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 15 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 16 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 17 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 18 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 19 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 20 - Salón Cama
+  Cliente: No reservado
+
+Asiento: 21 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 22 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 23 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 24 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 25 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 26 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 27 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 28 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 29 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 30 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 31 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 32 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 33 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 34 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 35 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 36 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 37 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 38 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 39 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 40 - Semi Cama
+  Cliente: No reservado
+

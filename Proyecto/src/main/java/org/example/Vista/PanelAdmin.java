@@ -1,12 +1,15 @@
 package org.example.Vista;
 
+import com.toedter.calendar.JDateChooser;
 import org.example.Modelo.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 public class PanelAdmin extends JPanel {
@@ -20,14 +23,18 @@ public class PanelAdmin extends JPanel {
     private JPasswordField contrasenaField;
     private BaseDeDatos baseDeDatos;
     private String panelActual;
+    private JComboBox<String> comboBoxInformeBuses;
+    private JDateChooser dateChooser;
+    private JButton botonCrearRecorrido; // Declaración de la variable
 
     public PanelAdmin(List<LocalTime> horarios, List<Bus> buses, BaseDeDatos baseDeDatos) {
-        this.baseDeDatos = baseDeDatos;
+        this.baseDeDatos = BaseDeDatos.getInstance();  // Usar la instancia Singleton
         setLayout(new CardLayout());
         configurarPanel1();
         configurarPanel2(horarios, buses);
         mostrarPanel1();
     }
+
 
     private void configurarPanel1() {
         panel1 = new JPanel();
@@ -99,9 +106,22 @@ public class PanelAdmin extends JPanel {
 
         agregarLabel();
         agregarHorarios(horarios);
+        agregarFecha();
         agregarOrigen();
         agregarDestino();
         agregarBuses(buses);
+        agregarBusesInforme(buses);
+
+        botonCrearRecorrido = new JButton("Crear Recorrido");
+        botonCrearRecorrido.setBounds(220, 150, 200, 30); // Ajuste en la posición y tamaño
+        botonCrearRecorrido.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                crearRecorrido();
+            }
+        });
+        crearBus.add(botonCrearRecorrido);
+
 
         JButton botonVolverPanel2 = new JButton("Volver");
         botonVolverPanel2.setFont(new Font("Arial", Font.BOLD, 20));
@@ -113,6 +133,17 @@ public class PanelAdmin extends JPanel {
             }
         });
         panel2.add(botonVolverPanel2);
+
+        JButton botonDescargarInforme = new JButton("Descargar Informe");
+        botonDescargarInforme.setFont(new Font("Arial", Font.BOLD, 15));
+        botonDescargarInforme.setBounds(320, 160, 200, 30);
+        botonDescargarInforme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                descargarInformeAsientos();
+            }
+        });
+        informeBus.add(botonDescargarInforme);
 
         add(panel2, "Panel2");
     }
@@ -145,6 +176,12 @@ public class PanelAdmin extends JPanel {
         crearBus.add(comboBoxHorarios);
     }
 
+    private void agregarFecha() {
+        dateChooser = new JDateChooser();
+        dateChooser.setBounds(10, 100, 200, 30);
+        crearBus.add(dateChooser);
+    }
+
     private void agregarOrigen() {
         comboBoxOrigen = new JComboBox<>(Ubicaciones.values());
         comboBoxOrigen.setBounds(220, 50, 200, 30);
@@ -164,16 +201,60 @@ public class PanelAdmin extends JPanel {
         }
 
         comboBoxBuses = new JComboBox<>(idsDeBuses);
-        comboBoxBuses.setBounds(10, 100, 200, 30);
+        comboBoxBuses.setBounds(10, 150, 200, 30);
         crearBus.add(comboBoxBuses);
+    }
+
+    private void agregarBusesInforme(List<Bus> buses) {
+        String[] idsDeBuses = buses.stream().map(Bus::getId).toArray(String[]::new);
+        comboBoxInformeBuses = new JComboBox<>(idsDeBuses);
+        comboBoxInformeBuses.setBounds(10, 80, 200, 30);
+        informeBus.add(comboBoxInformeBuses);
+    }
+
+    private void descargarInformeAsientos() {
+        String idBusSeleccionado = (String) comboBoxInformeBuses.getSelectedItem();
+        Bus busSeleccionado = baseDeDatos.getBusPorId(idBusSeleccionado);
+
+        if (busSeleccionado != null) {
+            String rutaArchivoInforme = "informeBuses\\informe_asientos_" + busSeleccionado.getId() + ".txt";
+
+            try {
+                InformeDeRuta informe = new InformeDeRuta(busSeleccionado, rutaArchivoInforme);
+                informe.generarInforme();
+                JOptionPane.showMessageDialog(this, "Informe descargado correctamente en: " + rutaArchivoInforme, "Informe Descargado", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error al descargar el informe", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Bus no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public LocalTime getHorarioSeleccionado() {
         return (LocalTime) comboBoxHorarios.getSelectedItem();
     }
 
-    public String getBusSeleccionado() {
-        return (String) comboBoxBuses.getSelectedItem();
+    public JButton getBotonCrearRecorrido() {
+        return botonCrearRecorrido;
+    }
+
+    public void crearRecorrido() {
+        LocalTime horarioSeleccionado = (LocalTime) comboBoxHorarios.getSelectedItem();
+        Ubicaciones origenSeleccionado = (Ubicaciones) comboBoxOrigen.getSelectedItem();
+        Ubicaciones destinoSeleccionado = (Ubicaciones) comboBoxDestino.getSelectedItem();
+        String busSeleccionadoId = (String) comboBoxBuses.getSelectedItem();
+        Bus busSeleccionado = baseDeDatos.getBusPorId(busSeleccionadoId);
+        Date fechaSeleccionada = dateChooser.getDate();
+
+        if (horarioSeleccionado != null && origenSeleccionado != null && destinoSeleccionado != null && busSeleccionado != null && fechaSeleccionada != null) {
+            int numeroAsientosDisponibles = busSeleccionado.getCapacidad();
+            Ruta nuevaRuta = new Ruta(origenSeleccionado, destinoSeleccionado, fechaSeleccionada, horarioSeleccionado, busSeleccionado, numeroAsientosDisponibles);
+            baseDeDatos.agregarRuta(nuevaRuta);
+            JOptionPane.showMessageDialog(this, "Recorrido creado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void addComboBoxActionListener(ActionListener listener) {

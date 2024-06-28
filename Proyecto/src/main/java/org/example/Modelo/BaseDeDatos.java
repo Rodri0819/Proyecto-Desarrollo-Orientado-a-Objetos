@@ -1,18 +1,19 @@
 package org.example.Modelo;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class BaseDeDatos {
+    private static BaseDeDatos instancia;
     private List<Ruta> rutas;
     private List<Bus> buses;
     private RutaFactory rutaFactory;
     private String usuario;
     private String contraseña;
 
-    public BaseDeDatos() {
+    private BaseDeDatos() {
         usuario = "admin";
         contraseña = "1234";
         rutas = new ArrayList<>();
@@ -20,6 +21,13 @@ public class BaseDeDatos {
         cargarDatos();
         rutaFactory = new RutaFactory(buses);
         generarRutas();
+    }
+
+    public static BaseDeDatos getInstance() {
+        if (instancia == null) {
+            instancia = new BaseDeDatos();
+        }
+        return instancia;
     }
 
     private void cargarDatos() {
@@ -52,6 +60,19 @@ public class BaseDeDatos {
 
     public List<Bus> getBuses() {
         return buses;
+    }
+
+    public Bus getBusPorId(String id) {
+        for (Bus bus : buses) {
+            if (bus.getId().equals(id)) {
+                return bus;
+            }
+        }
+        return null;
+    }
+
+    public void agregarRuta(Ruta ruta) {
+        rutas.add(ruta);
     }
 
     public boolean verificarCredenciales(String usuario, String contraseña) {

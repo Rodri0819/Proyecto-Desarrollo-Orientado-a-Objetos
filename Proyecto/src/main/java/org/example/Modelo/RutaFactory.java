@@ -1,9 +1,11 @@
 package org.example.Modelo;
 
-
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class RutaFactory {
     private List<Bus> buses;
@@ -14,21 +16,26 @@ public class RutaFactory {
 
     public List<Ruta> crearRutas(Ubicaciones origen, Ubicaciones destino, int dias) {
         List<Ruta> rutas = new ArrayList<>();
-        String[] horarios = {"08:00", "12:00", "17:00", "20:00"};
+        LocalTime start = LocalTime.of(8, 0); // Hora de inicio
+        LocalTime end = LocalTime.of(20, 0); // Hora de fin
         int busIndex = 0;
 
         for (int i = 0; i < dias; i++) {
             LocalDate localDate = LocalDate.now().plusDays(i);
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            for (String horario : horarios) {
+            LocalTime current = start;
+            while (!current.isAfter(end)) {
                 Bus busOriginal = buses.get(busIndex); // Alterna entre los buses disponibles
                 Bus busClonado = busOriginal.clone(); // Clona el bus para esta ruta
                 int precio = calcularPrecioTotal(origen, destino, busClonado);
-                rutas.add(new Ruta(origen, destino, date, horario, busClonado, precio));
+                rutas.add(new Ruta(origen, destino, date, current, busClonado, precio));
 
                 // Alternar el índice de bus
                 busIndex = (busIndex + 1) % buses.size();
+
+                // Incrementar la hora en una hora
+                current = current.plusHours(1);
             }
         }
 
