@@ -3,6 +3,7 @@ package org.example.Modelo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,15 +17,23 @@ public class RutaFactory {
 
     public List<Ruta> crearRutas(Ubicaciones origen, Ubicaciones destino, int dias) {
         List<Ruta> rutas = new ArrayList<>();
-        LocalTime start = LocalTime.of(8, 0); // Hora de inicio
-        LocalTime end = LocalTime.of(20, 0); // Hora de fin
+        LocalTime horaActual = LocalTime.now();
+        LocalTime start = LocalTime.of(8, 0); // Hora de inicio general
+        LocalTime end = LocalTime.of(22, 0); // Hora de fin
         int busIndex = 0;
 
         for (int i = 0; i < dias; i++) {
             LocalDate localDate = LocalDate.now().plusDays(i);
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            LocalTime current = start;
+            LocalTime currentStart;
+            if (i == 0) { // Si es el día actual
+                currentStart = horaActual.plusMinutes(30).withMinute(0).plusHours(1); // Redondear a la siguiente hora completa
+            } else { // Días futuros
+                currentStart = start;
+            }
+
+            LocalTime current = currentStart;
             while (!current.isAfter(end)) {
                 Bus busOriginal = buses.get(busIndex); // Alterna entre los buses disponibles
                 Bus busClonado = busOriginal.clone(); // Clona el bus para esta ruta

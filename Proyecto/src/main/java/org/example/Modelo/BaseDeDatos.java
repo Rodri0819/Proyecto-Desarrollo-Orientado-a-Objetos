@@ -1,6 +1,7 @@
 package org.example.Modelo;
 
 import java.time.LocalTime;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

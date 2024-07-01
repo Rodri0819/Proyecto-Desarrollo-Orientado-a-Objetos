@@ -1,0 +1,14 @@
+**Pasaje**
+
+Cliente: duki elpro
+RUT: 21.422.211-6
+Email: walelo@uwu
+
+Origen: LOS_ANGELES
+Destino: CONCEPCION
+Fecha: 2024-07-01
+Hora: 21:00:18.812808100
+Bus: DXDY-5
+Asiento: 7 (Salón Cama)
+Precio Total: 410000
+

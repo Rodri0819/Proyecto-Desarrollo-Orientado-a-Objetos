@@ -411,7 +411,6 @@
                 Cliente cliente = new Cliente(nombre, apellido, rut, email);
                 Pasaje pasaje = new Pasaje(rutaSeleccionada, cliente, asientoSeleccionado, "pasajes\\pasaje_" + cliente.getNombre() + "_" + cliente.getApellido() + ".txt");
                 pasaje.generarInforme();
-                JOptionPane.showMessageDialog(this, "Cliente guardado y pasaje generado correctamente.");
                 return true;
             } else {
                 return false;
@@ -568,7 +567,7 @@
                 data[i][0] = ruta.getOrigen();
                 data[i][1] = ruta.getDestino();
                 data[i][2] = dateFormat.format(ruta.getFecha());
-                data[i][3] = ruta.getHora();
+                data[i][3] = ruta.getHoraFormateada(); // Usar getHoraFormateada para obtener la hora formateada
                 data[i][4] = ruta.getBus().getId();
             }
 

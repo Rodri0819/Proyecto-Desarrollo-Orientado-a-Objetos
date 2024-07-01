@@ -1,8 +1,8 @@
 package org.example.Modelo;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.List;
 
 public class Ruta {
     private Ubicaciones origen;
@@ -41,11 +41,12 @@ public class Ruta {
         return bus;
     }
 
-    public List<Asiento> getAsientos() {
-        return bus.getAsientos();
-    }
-
     public int getPrecio() {
         return precio;
+    }
+
+    public String getHoraFormateada() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return this.hora.format(formatter);
     }
 }
