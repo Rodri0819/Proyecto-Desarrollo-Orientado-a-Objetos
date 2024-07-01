@@ -1,0 +1,14 @@
+**Pasaje**
+
+Cliente: asd asd
+RUT: 21.696.945-6
+Email: 123@aksjd.com
+
+Origen: LOS_ANGELES
+Destino: CONCEPCION
+Fecha: 2024-07-02
+Hora: 18:00
+Bus: DXDY-5
+Asiento: 15 (Salón Cama)
+Precio Total: 410000
+

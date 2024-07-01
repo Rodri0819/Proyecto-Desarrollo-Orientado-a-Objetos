@@ -1,0 +1,14 @@
+**Pasaje**
+
+Cliente: sad asd
+RUT: 21.696.945-6
+Email: asd@gmail.com
+
+Origen: LOS_ANGELES
+Destino: CONCEPCION
+Fecha: 2024-07-02
+Hora: 17:00
+Bus: DX69-4
+Asiento: 10 (Semi Cama)
+Precio Total: 150000
+

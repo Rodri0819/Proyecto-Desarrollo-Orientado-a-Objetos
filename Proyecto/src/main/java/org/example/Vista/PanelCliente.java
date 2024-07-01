@@ -32,6 +32,12 @@
         private JTextField apellidoField;
         private JTextField rutField;
         private JTextField emailField;
+        private JTextField tarjetaField;
+        private JTextField caducidadField;
+        private JTextField cvvField;
+
+
+
         private JButton guardarButton;
         private Asiento asientoSeleccionado;
         private JButton botonConfirmarReserva;
@@ -243,6 +249,30 @@
             emailField.setBounds(150, 190, 200, 30);
             panel4.add(emailField);
 
+            JLabel tarjetaLabel = new JLabel("N° Tarjeta:");
+            tarjetaLabel.setBounds(400, 70, 100, 30);
+            panel4.add(tarjetaLabel);
+
+            tarjetaField = new JTextField();
+            tarjetaField.setBounds(500, 70, 200, 30);
+            panel4.add(tarjetaField);
+
+            JLabel caducidadLabel = new JLabel("Caducidad:");
+            caducidadLabel.setBounds(400, 110, 100, 30);
+            panel4.add(caducidadLabel);
+
+            caducidadField = new JTextField();
+            caducidadField.setBounds(500, 110, 200, 30);
+            panel4.add(caducidadField);
+
+            JLabel cvvLabel = new JLabel("CVV:");
+            cvvLabel.setBounds(400, 150, 100, 30);
+            panel4.add(cvvLabel);
+
+            cvvField = new JTextField();
+            cvvField.setBounds(500, 150, 200, 30);
+            panel4.add(cvvField);
+
             precioLabel = new JLabel("Precio: No seleccionado");
             precioLabel.setFont(new Font("Arial", Font.BOLD, 15));
             precioLabel.setBounds(50, 270, 200, 30);
@@ -260,7 +290,7 @@
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     confirmarReserva();
-                    guardarCliente();
+
                 }
             });
             panel4.add(botonConfirmarReserva);
@@ -300,23 +330,100 @@
             }
         }
 
-        private void guardarCliente() {
+
+        private boolean validarDatosCliente(String nombre, String apellido, String rut, String email, String tarjeta, String caducidad, String cvv) {
+            // Validación de nombre y apellido
+            if (nombre.isEmpty() || apellido.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nombre y apellido no pueden estar vacíos.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            if (!nombre.matches("[A-Za-zÁÉÍÓÚáéíóúñÑ ]+") || !apellido.matches("[A-Za-zÁÉÍÓÚáéíóúñÑ ]+")) {
+                JOptionPane.showMessageDialog(this, "Nombre y apellido solo deben contener letras y espacios.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // Validación de RUT
+            if (!validarRUT(rut)) {
+                JOptionPane.showMessageDialog(this, "RUT inválido.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // Validación de Email
+            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                JOptionPane.showMessageDialog(this, "Formato de email inválido.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // Validación de Número de Tarjeta
+            if (!tarjeta.matches("\\d{16}")){
+                JOptionPane.showMessageDialog(this, "El Número de Tarjeta debe contener 16 dígitos.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // Validación de Fecha de Caducidad
+            if (!caducidad.matches("\\d{2}/\\d{2}")){
+                JOptionPane.showMessageDialog(this, "La Fecha de Caducidad debe ser del formato MM/YY.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            String mes = caducidad.substring(0, 2);
+            int mesInt = Integer.parseInt(mes);
+            if (mesInt < 1 || mesInt > 12) {
+                JOptionPane.showMessageDialog(this, "El mes debe estar entre 01 y 12.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // Validación de CVV
+            if (!cvv.matches("\\d{3}")){
+                JOptionPane.showMessageDialog(this, "El CVV debe contener 3 dígitos.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            return true;
+        }
+        private boolean validarRUT(String rut) {
+            try {
+                rut = rut.toUpperCase();
+                rut = rut.replace(".", "").replace("-", "");
+                int rutAux = Integer.parseInt(rut.substring(0, rut.length() - 1));
+
+                char dv = rut.charAt(rut.length() - 1);
+
+                int m = 0, s = 1;
+                for (; rutAux != 0; rutAux /= 10) {
+                    s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
+                }
+                return dv == (char) (s != 0 ? s + 47 : 75);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+
+        private boolean guardarCliente() {
             String nombre = nombreField.getText();
             String apellido = apellidoField.getText();
             String rut = rutField.getText();
             String email = emailField.getText();
+            String tarjeta = tarjetaField.getText();
+            String caducidad = caducidadField.getText();
+            String cvv = cvvField.getText();
 
-            Cliente cliente = new Cliente(nombre, apellido, rut, email);
-            Pasaje pasaje = new Pasaje(rutaSeleccionada, cliente, asientoSeleccionado, "pasajes\\pasaje_" + cliente.getNombre() + "_" + cliente.getApellido() + ".txt");
-            pasaje.generarInforme();
+            if (validarDatosCliente(nombre, apellido, rut, email, tarjeta, caducidad, cvv)) {
+                Cliente cliente = new Cliente(nombre, apellido, rut, email);
+                Pasaje pasaje = new Pasaje(rutaSeleccionada, cliente, asientoSeleccionado, "pasajes\\pasaje_" + cliente.getNombre() + "_" + cliente.getApellido() + ".txt");
+                pasaje.generarInforme();
+                JOptionPane.showMessageDialog(this, "Cliente guardado y pasaje generado correctamente.");
+                return true;
+            } else {
+                return false;
+            }
         }
-
         private void confirmarReserva() {
             if (asientoSeleccionado != null) {
                 asientoSeleccionado.setEstado(false);
-                JOptionPane.showMessageDialog(panel4, "Reserva confirmada.");
-                guardarCliente();
-                mostrarPanel3();
+                if (guardarCliente()) {
+                    JOptionPane.showMessageDialog(panel4, "Reserva confirmada.");
+                    mostrarPanel3();
+                }
             } else {
                 JOptionPane.showMessageDialog(panel4, "No se ha seleccionado ningún asiento.", "Error", JOptionPane.ERROR_MESSAGE);
             }
