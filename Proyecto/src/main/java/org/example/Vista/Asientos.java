@@ -41,7 +41,11 @@ public class Asientos extends JPanel {
             botonAsiento.setPreferredSize(new Dimension(ancho, alto));
 
             if (asiento.isEstado()) {
-                botonAsiento.setBackground(new Color(0x53E131));
+                if (asiento.getCategoria()=="Semi Cama") {
+                    botonAsiento.setBackground(new Color(0x53E131));
+                } else {
+                    botonAsiento.setBackground(new Color(0x239A64));
+                }
             } else {
                 botonAsiento.setBackground(new Color(0xCE1D1D));
             }

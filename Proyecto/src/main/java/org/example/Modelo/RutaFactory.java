@@ -51,32 +51,32 @@ public class RutaFactory {
         return rutas;
     }
 
-    public int calcularPrecioBase(Ubicaciones origen, Ubicaciones destino) {
+    public static int calcularPrecioBase(Ubicaciones origen, Ubicaciones destino) {
         // Definir precios entre ubicaciones
         if (origen == Ubicaciones.LOS_ANGELES && destino == Ubicaciones.SANTIAGO) {
-            return 13000;
+            return 13500;
         } else if (origen == Ubicaciones.LOS_ANGELES && destino == Ubicaciones.CONCEPCION) {
-            return 10000;
+            return 4000;
         } else if (origen == Ubicaciones.LOS_ANGELES && destino == Ubicaciones.CURANILAHUE) {
-            return 12300;
+            return 5000;
         } else if (origen == Ubicaciones.CONCEPCION && destino == Ubicaciones.SANTIAGO) {
-            return 15200;
+            return 11000;
         } else if (origen == Ubicaciones.CONCEPCION && destino == Ubicaciones.CURANILAHUE) {
-            return 15200;
+            return 2500;
         } else if (origen == Ubicaciones.CONCEPCION && destino == Ubicaciones.LOS_ANGELES) {
-            return 14200;
+            return 4000;
         } else if (origen == Ubicaciones.SANTIAGO && destino == Ubicaciones.CONCEPCION) {
-            return 11200;
+            return 11000;
         } else if (origen == Ubicaciones.SANTIAGO && destino == Ubicaciones.CURANILAHUE) {
-            return 11200;
+            return 16000;
         } else if (origen == Ubicaciones.SANTIAGO && destino == Ubicaciones.LOS_ANGELES) {
-            return 11200;
+            return 13500;
         } else if (origen == Ubicaciones.CURANILAHUE && destino == Ubicaciones.SANTIAGO) {
-            return 12200;
+            return 16000;
         } else if (origen == Ubicaciones.CURANILAHUE && destino == Ubicaciones.CONCEPCION) {
-            return 13200;
+            return 2500;
         } else if (origen == Ubicaciones.CURANILAHUE && destino == Ubicaciones.LOS_ANGELES) {
-            return 13200;
+            return 5000;
         } else {
             return -1;
         }
@@ -84,9 +84,9 @@ public class RutaFactory {
 
     public int calcularPrecioAsiento(String categoria) {
         if (categoria.equals("Semi Cama")) {
-            return 5000;
+            return 2000;
         } else if (categoria.equals("Salón Cama")) {
-            return 15000;
+            return 4000;
         } else {
             return 0;
         }
@@ -96,7 +96,7 @@ public class RutaFactory {
         int precioBase = calcularPrecioBase(origen, destino);
         int precioTotal = precioBase;
         for (Asiento asiento : bus.getAsientos()) {
-            precioTotal += calcularPrecioAsiento(asiento.getCategoria());
+            precioTotal += calcularPrecioAsiento(asiento.getCategoria())/120000;
         }
         return precioTotal;
     }

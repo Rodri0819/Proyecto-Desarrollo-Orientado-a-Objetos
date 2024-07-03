@@ -523,6 +523,21 @@
                 labelDetalle.setBounds(100, 10, 600, 30);
                 panel3.add(labelDetalle);
 
+                JLabel semi = new JLabel("Semi cama", SwingConstants.CENTER);
+                semi.setFont(new Font("Arial", Font.BOLD, 16));
+                semi.setOpaque(true);
+                semi.setBackground(new Color(29, 206, 79));
+                semi.setForeground(Color.WHITE);
+                semi.setBounds(170, 680, 100, 30);
+                panel3.add(semi);
+                JLabel salon = new JLabel("Salón cama", SwingConstants.CENTER);
+                salon.setFont(new Font("Arial", Font.BOLD, 16));
+                salon.setOpaque(true);
+                salon.setBackground(new Color(35, 154, 100));
+                salon.setForeground(Color.WHITE);
+                salon.setBounds(170, 710, 100, 30);
+                panel3.add(salon);
+
                 JButton botonVolverPanel3 = new JButton("Volver");
                 botonVolverPanel3.setFont(new Font("Arial", Font.BOLD, 20));
                 botonVolverPanel3.setBounds(288, 700, 200, 30);

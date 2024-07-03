@@ -33,6 +33,11 @@ public class PanelAdmin extends JPanel {
     private List<Ruta> rutas;  // Definición de la variable de instancia para almacenar rutas
     private JScrollPane scrollPaneRutas;  // Si deseas hacer la tabla desplazable
     private JTable tablaRutas; // Define la tabla aquí como variable de instancia
+    private JComboBox<LocalTime> comboBoxHorariosCrear;
+    private JComboBox<Ubicaciones> comboBoxOrigenCrear;
+    private JComboBox<Ubicaciones> comboBoxDestinoCrear;
+    private JComboBox<String> comboBoxBusesCrear;
+    private JDateChooser dateChooserCrear;
 
     public PanelAdmin(List<LocalTime> horarios, List<Bus> buses, BaseDeDatos baseDeDatos) {
         this.baseDeDatos = BaseDeDatos.getInstance();  // Usar la instancia Singleton
@@ -94,21 +99,21 @@ public class PanelAdmin extends JPanel {
         panel2.setBackground(new Color(114, 206, 206));
 
         crearRecorrido.setLayout(null);
-        crearRecorrido.setBounds(80, 50, 570, 300); // Aumentar la altura para acomodar todos los componentes
+        crearRecorrido.setBounds(80, 50, 570, 300);
         crearRecorrido.setBackground(new Color(200, 200, 200));
         panel2.add(crearRecorrido);
 
         agregarLabel(crearRecorrido);
-        agregarHorarios(crearRecorrido, horarios);
-        agregarFecha(crearRecorrido);
-        agregarOrigen(crearRecorrido);
-        agregarDestino(crearRecorrido);
-        agregarBuses(crearRecorrido, buses);
+        agregarHorariosCrear(crearRecorrido, horarios);
+        agregarFechaCrear(crearRecorrido);
+        agregarOrigenCrear(crearRecorrido);
+        agregarDestinoCrear(crearRecorrido);
+        agregarBusesCrear(crearRecorrido, buses);
         configurarBotonesOpciones(crearRecorrido);
 
         Opciones = new JPanel();
         Opciones.setLayout(null);
-        Opciones.setBounds(80, 370, 570, 250); // Ajustar la altura para incluir más espacio
+        Opciones.setBounds(80, 370, 570, 250);
         Opciones.setBackground(new Color(200, 200, 200));
         panel2.add(Opciones);
 
@@ -122,9 +127,9 @@ public class PanelAdmin extends JPanel {
         botonRegistrarPasaje.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Ubicaciones desdeUbicacion = getUbicacionDesde();
-                Ubicaciones hastaUbicacion = getUbicacionHasta();
-                Date fechaSeleccionada = getFechaSeleccionada();
+                Ubicaciones desdeUbicacion = (Ubicaciones) comboBoxOrigen.getSelectedItem();
+                Ubicaciones hastaUbicacion = (Ubicaciones) comboBoxDestino.getSelectedItem();
+                Date fechaSeleccionada = dateChooser.getDate();
 
                 if (desdeUbicacion == hastaUbicacion) {
                     JOptionPane.showMessageDialog(PanelAdmin.this, "No puedes viajar hacia donde estás.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -158,20 +163,20 @@ public class PanelAdmin extends JPanel {
 
         add(panel2, "Panel2");
 
-        tablaRutas = new JTable();  // Asegúrate de inicializar tablaRutas aquí
+        tablaRutas = new JTable();
         tablaRutas.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int fila = tablaRutas.getSelectedRow();
                     if (fila != -1) {
-                        Ruta rutaSeleccionada = rutas.get(fila); // Guardar la ruta seleccionada
-                        // Aquí puedes agregar el código para manejar la selección de la ruta
+                        Ruta rutaSeleccionada = rutas.get(fila);
                     }
                 }
             }
         });
     }
+
 
     private void configurarPanel3() {
         panel3 = new JPanel();
@@ -278,7 +283,8 @@ public class PanelAdmin extends JPanel {
 
     private void agregarFecha(JPanel panel) {
         dateChooser = new JDateChooser();
-        dateChooser.setBounds(10, 100, 200, 30);
+        dateChooser.setBounds(10, 50, 200, 30);
+        dateChooser.setMinSelectableDate(new Date());
         panel.add(dateChooser);
     }
 
@@ -316,7 +322,41 @@ public class PanelAdmin extends JPanel {
         });
         panel.add(botonCrearRecorrido);
     }
+    private void agregarHorariosCrear(JPanel panel, List<LocalTime> horarios) {
+        comboBoxHorariosCrear = new JComboBox<>(horarios.toArray(new LocalTime[0]));
+        comboBoxHorariosCrear.setBounds(10, 50, 200, 30);
+        panel.add(comboBoxHorariosCrear);
+    }
 
+    private void agregarFechaCrear(JPanel panel) {
+        dateChooserCrear = new JDateChooser();
+        dateChooserCrear.setBounds(10, 100, 200, 30);
+        dateChooserCrear.setMinSelectableDate(new Date());  // Deshabilitar fechas pasadas
+        panel.add(dateChooserCrear);
+    }
+
+    private void agregarOrigenCrear(JPanel panel) {
+        comboBoxOrigenCrear = new JComboBox<>(Ubicaciones.values());
+        comboBoxOrigenCrear.setBounds(220, 50, 200, 30);
+        panel.add(comboBoxOrigenCrear);
+    }
+
+    private void agregarDestinoCrear(JPanel panel) {
+        comboBoxDestinoCrear = new JComboBox<>(Ubicaciones.values());
+        comboBoxDestinoCrear.setBounds(220, 100, 200, 30);
+        panel.add(comboBoxDestinoCrear);
+    }
+
+    private void agregarBusesCrear(JPanel panel, List<Bus> buses) {
+        String[] idsDeBuses = new String[buses.size()];
+        for (int i = 0; i < buses.size(); i++) {
+            idsDeBuses[i] = buses.get(i).getId();
+        }
+
+        comboBoxBusesCrear = new JComboBox<>(idsDeBuses);
+        comboBoxBusesCrear.setBounds(10, 150, 200, 30);
+        panel.add(comboBoxBusesCrear);
+    }
     private void agregarBusesInforme(JPanel panel, List<Bus> buses) {
         JButton botonDescargarInforme = new JButton("Descargar Informe");
         botonDescargarInforme.setFont(new Font("Arial", Font.BOLD, 15));
@@ -358,22 +398,29 @@ public class PanelAdmin extends JPanel {
     }
 
     public void crearRecorrido() {
-        LocalTime horarioSeleccionado = (LocalTime) comboBoxHorarios.getSelectedItem();
-        Ubicaciones origenSeleccionado = (Ubicaciones) comboBoxOrigen.getSelectedItem();
-        Ubicaciones destinoSeleccionado = (Ubicaciones) comboBoxDestino.getSelectedItem();
-        String busSeleccionadoId = (String) comboBoxBuses.getSelectedItem();
+        LocalTime horarioSeleccionado = (LocalTime) comboBoxHorariosCrear.getSelectedItem();
+        Ubicaciones origenSeleccionado = (Ubicaciones) comboBoxOrigenCrear.getSelectedItem();
+        Ubicaciones destinoSeleccionado = (Ubicaciones) comboBoxDestinoCrear.getSelectedItem();
+        String busSeleccionadoId = (String) comboBoxBusesCrear.getSelectedItem();
         Bus busSeleccionado = baseDeDatos.getBusPorId(busSeleccionadoId);
-        Date fechaSeleccionada = dateChooser.getDate();
+        Date fechaSeleccionada = dateChooserCrear.getDate();
+
+        if (origenSeleccionado == destinoSeleccionado) {
+            JOptionPane.showMessageDialog(this, "El origen y destino no pueden ser iguales.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         if (horarioSeleccionado != null && origenSeleccionado != null && destinoSeleccionado != null && busSeleccionado != null && fechaSeleccionada != null) {
-            int numeroAsientosDisponibles = busSeleccionado.getCapacidad();
-            Ruta nuevaRuta = new Ruta(origenSeleccionado, destinoSeleccionado, fechaSeleccionada, horarioSeleccionado, busSeleccionado, numeroAsientosDisponibles);
+            int Precio = RutaFactory.calcularPrecioBase(origenSeleccionado, destinoSeleccionado);
+            Ruta nuevaRuta = new Ruta(origenSeleccionado, destinoSeleccionado, fechaSeleccionada, horarioSeleccionado, busSeleccionado, Precio);
             baseDeDatos.agregarRuta(nuevaRuta);
             JOptionPane.showMessageDialog(this, "Recorrido creado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+
 
     public void addComboBoxActionListener(ActionListener listener) {
         comboBoxHorarios.addActionListener(listener);

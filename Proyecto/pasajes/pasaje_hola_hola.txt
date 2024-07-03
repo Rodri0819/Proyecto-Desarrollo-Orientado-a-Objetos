@@ -1,0 +1,14 @@
+**Pasaje**
+
+Cliente: hola hola
+RUT: 216609077
+Email: h@gmail.com
+
+Origen: CURANILAHUE
+Destino: LOS_ANGELES
+Fecha: 2024-07-03
+Hora: 08:00
+Bus: DXDY-5
+Asiento: 25 (Semi Cama)
+Precio Total: 5000
+
