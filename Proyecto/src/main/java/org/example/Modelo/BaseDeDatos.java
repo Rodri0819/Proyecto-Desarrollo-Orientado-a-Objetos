@@ -55,9 +55,14 @@ public class BaseDeDatos {
         return rutasEncontradas;
     }
 
-    private boolean esMismaFecha(Date fecha1, Date fecha2) {
-        return fecha1.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().equals(fecha2.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate());
+    public boolean esMismaFecha(Date fecha1, Date fecha2) {
+        if (fecha1 == null || fecha2 == null) {
+            return false; // Si cualquiera de las fechas es nula, no pueden ser iguales.
+        }
+
+        return fecha1.toInstant().equals(fecha2.toInstant());
     }
+
 
     public List<Bus> getBuses() {
         return buses;

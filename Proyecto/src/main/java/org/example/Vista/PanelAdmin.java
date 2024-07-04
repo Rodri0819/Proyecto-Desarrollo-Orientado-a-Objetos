@@ -40,13 +40,14 @@ public class PanelAdmin extends JPanel {
     private JDateChooser dateChooserCrear;
 
     public PanelAdmin(List<LocalTime> horarios, List<Bus> buses, BaseDeDatos baseDeDatos) {
-        this.baseDeDatos = BaseDeDatos.getInstance();  // Usar la instancia Singleton
+        this.baseDeDatos = BaseDeDatos.getInstance();
         setLayout(new CardLayout());
         configurarPanel1();
         configurarPanel2(horarios, buses);
         configurarPanel3();
         mostrarPanel1();
     }
+
 
     private void configurarPanel1() {
         panel1 = new JPanel();
@@ -163,6 +164,10 @@ public class PanelAdmin extends JPanel {
 
         add(panel2, "Panel2");
 
+        // Inicializa comboBoxHorarios aquí
+        comboBoxHorarios = new JComboBox<>(horarios.toArray(new LocalTime[0]));
+        panel2.add(comboBoxHorarios); // Asegúrate de añadir el comboBox al panel
+
         tablaRutas = new JTable();
         tablaRutas.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -273,6 +278,15 @@ public class PanelAdmin extends JPanel {
         opciones.setFont(new Font("Arial", Font.BOLD, 15));
         opciones.setBounds(10, 10, 200, 30);
         panel.add(opciones);
+
+        JLabel origen = new JLabel("Origen");
+        origen.setFont(new Font("Arial", Font.BOLD, 13));
+        origen.setBounds(430, 50, 200, 30);
+        panel.add(origen);
+        JLabel destino = new JLabel("Destino");
+        destino.setFont(new Font("Arial", Font.BOLD, 13));
+        destino.setBounds(430, 100, 200, 30);
+        panel.add(destino);
     }
 
     private void agregarHorarios(JPanel panel, List<LocalTime> horarios) {

@@ -14,7 +14,7 @@
     import java.util.List;
 
     public class PanelCliente extends JPanel {
-        private JPanel desde, hasta, dia;
+        private JPanel desde, hasta, dia, ruta;
         private JComboBox<Ubicaciones> comboBoxDesde, comboBoxHasta;
         private JDateChooser dateChooser;
         private JPanel panel1, panel2, panel3, panel4;
@@ -24,7 +24,7 @@
         private String panelActual;
         private Ruta rutaSeleccionada;
         private List<Ruta> rutas;
-        private JLabel precioLabel, TipoAsientoLabel;
+        private JLabel precioLabel, TipoAsientoLabel, origenLabelText, destinoLabelText, semicamaLabelText, saloncamaLabelText;
         private int precio;
 
         // Campos para el formulario de cliente
@@ -35,9 +35,6 @@
         private JTextField tarjetaField;
         private JTextField caducidadField;
         private JTextField cvvField;
-
-
-
         private JButton guardarButton;
         private Asiento asientoSeleccionado;
         private JButton botonConfirmarReserva;
@@ -51,6 +48,43 @@
             agregarPanel3();
             agregarPanel4();
             mostrarPanel1();
+
+            // Listenner para los JBox
+            comboBoxDesde.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    actualizarLabelsRuta();
+                }
+            });
+
+            comboBoxHasta.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    actualizarLabelsRuta();
+                }
+            });
+        }
+
+        private void actualizarLabelsRuta() {
+            Ubicaciones origen = (Ubicaciones) comboBoxDesde.getSelectedItem();
+            Ubicaciones destino = (Ubicaciones) comboBoxHasta.getSelectedItem();
+            int semiprecio = RutaFactory.calcularPrecioBase(origen, destino)+2000;
+            int salonprecio = RutaFactory.calcularPrecioBase(origen, destino)+4000;
+
+            if (origen != destino){
+                if (origen != null) {
+                    origenLabelText.setText(origen.toString());
+                }
+
+                if (destino != null) {
+                    destinoLabelText.setText(destino.toString());
+                    semicamaLabelText.setText("$"+ semiprecio);
+                    saloncamaLabelText.setText("$"+ salonprecio);
+                }
+            }else{
+                semicamaLabelText.setText("Cambie la ruta");
+                saloncamaLabelText.setText("Cambie la ruta");
+            }
         }
 
         private void configurarPanel() {
@@ -63,16 +97,20 @@
         private void agregarPanel1() {
             panel1 = new JPanel();
             panel1.setLayout(null);
-            panel1.setBackground(new Color(189, 105, 105));
+            panel1.setBackground(new Color(173, 216, 230));
 
-            JLabel pasaje = new JLabel("Panel Cliente");
-            pasaje.setFont(new Font("Arial", Font.BOLD, 20));
-            pasaje.setBounds(335, 10, 500, 30);
+            JLabel pasaje = new JLabel("Panel Cliente", SwingConstants.CENTER);
+            pasaje.setFont(new Font("Arial", Font.BOLD, 19));
+            pasaje.setOpaque(true);
+            pasaje.setBackground(new Color(54, 107, 143));
+            pasaje.setForeground(Color.WHITE);
+            pasaje.setBounds(100, 10, 600, 30);
             panel1.add(pasaje);
 
             agregarPanelDesde();
             agregarPanelHasta();
             agregarPanelDia();
+            agregarPanelRutaSeleccionada();
 
             agregarBotonItinerario(panel1);
 
@@ -82,8 +120,8 @@
         private void agregarPanelDesde() {
             desde = new JPanel();
             desde.setLayout(null);
-            desde.setBounds(15, 50, 570, 150);
-            desde.setBackground(new Color(157, 218, 184));
+            desde.setBounds(15, 50, 370, 150);
+            desde.setBackground(new Color(187, 206, 211, 236));
             panel1.add(desde);
 
             JLabel labelDesde = new JLabel("¿Desde donde viajas?");
@@ -99,8 +137,8 @@
         private void agregarPanelHasta() {
             hasta = new JPanel();
             hasta.setLayout(null);
-            hasta.setBounds(15, 210, 570, 150);
-            hasta.setBackground(new Color(225, 122, 122));
+            hasta.setBounds(15, 210, 370, 150);
+            hasta.setBackground(new Color(187, 206, 211, 236));
             panel1.add(hasta);
 
             JLabel labelHasta = new JLabel("¿Hacia donde vas?");
@@ -116,8 +154,8 @@
         private void agregarPanelDia() {
             dia = new JPanel();
             dia.setLayout(null);
-            dia.setBounds(15, 370, 570, 300);
-            dia.setBackground(new Color(162, 113, 194));
+            dia.setBounds(15, 370, 370, 300);
+            dia.setBackground(new Color(187, 206, 211, 236));
             panel1.add(dia);
 
             JLabel labelDia = new JLabel("¿Qué día vas?");
@@ -131,6 +169,71 @@
             dia.add(dateChooser);
         }
 
+
+
+        private void agregarPanelRutaSeleccionada() {
+            ruta = new JPanel();
+            ruta.setLayout(null);
+            ruta.setBounds(415, 50, 370, 300);
+            ruta.setBackground(new Color(187, 206, 211, 236));
+            panel1.add(ruta);
+
+            JLabel labelRutaSeleccionada = new JLabel("Ruta seleccionada");
+            labelRutaSeleccionada.setFont(new Font("Arial", Font.BOLD, 15));
+            labelRutaSeleccionada.setBounds(10, 10, 200, 30);
+            ruta.add(labelRutaSeleccionada);
+
+            JLabel origenLabel = new JLabel("Origen: ");
+            origenLabel.setFont(new Font("Arial", Font.BOLD, 13));
+            origenLabel.setBounds(10, 50, 100, 30);
+            ruta.add(origenLabel);
+
+            origenLabelText = new JLabel("No hay selección");
+            origenLabelText.setFont(new Font("Arial", Font.PLAIN, 13));
+            origenLabelText.setBounds(120, 50, 200, 30);
+            ruta.add(origenLabelText);
+
+            JLabel destinoLabel = new JLabel("Destino:");
+            destinoLabel.setFont(new Font("Arial", Font.BOLD, 13));
+            destinoLabel.setBounds(10, 90, 100, 30);
+            ruta.add(destinoLabel);
+
+            destinoLabelText = new JLabel("No hay selección");
+            destinoLabelText.setFont(new Font("Arial", Font.PLAIN, 13));
+            destinoLabelText.setBounds(120, 90, 200, 30);
+            ruta.add(destinoLabelText);
+
+            JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+            separator.setBounds(10, 130, 350, 10);
+            ruta.add(separator);
+
+            JLabel labelPrecios = new JLabel("Precios");
+            labelPrecios.setFont(new Font("Arial", Font.BOLD, 15));
+            labelPrecios.setBounds(10, 150, 200, 30);
+            ruta.add(labelPrecios);
+
+            JLabel precioSemi = new JLabel("Semi cama:");
+            precioSemi.setFont(new Font("Arial", Font.BOLD, 13));
+            precioSemi.setBounds(10, 190, 200, 30);
+            ruta.add(precioSemi);
+
+            semicamaLabelText = new JLabel("No hay selección");
+            semicamaLabelText.setFont(new Font("Arial", Font.PLAIN, 13));
+            semicamaLabelText.setBounds(120, 190, 200, 30);
+            ruta.add(semicamaLabelText);
+
+            JLabel precioSalon = new JLabel("Salón cama:");
+            precioSalon.setFont(new Font("Arial", Font.BOLD, 13));
+            precioSalon.setBounds(10, 230, 200, 30);
+            ruta.add(precioSalon);
+
+            saloncamaLabelText = new JLabel("No hay selección");
+            saloncamaLabelText.setFont(new Font("Arial", Font.PLAIN, 13));
+            saloncamaLabelText.setBounds(120, 230, 200, 30);
+            ruta.add(saloncamaLabelText);
+        }
+
+
         public Date getFechaSeleccionada() {
             return dateChooser.getDate();
         }
@@ -138,10 +241,13 @@
         private void agregarPanel2() {
             panel2 = new JPanel();
             panel2.setLayout(null);
-            panel2.setBackground(new Color(189, 105, 105));
+            panel2.setBackground(new Color(173, 216, 230));
 
             JLabel labelRutas = new JLabel("Rutas Disponibles", SwingConstants.CENTER);
-            labelRutas.setFont(new Font("Arial", Font.BOLD, 20));
+            labelRutas.setFont(new Font("Arial", Font.BOLD, 19));
+            labelRutas.setOpaque(true);
+            labelRutas.setBackground(new Color(54, 107, 143));
+            labelRutas.setForeground(Color.WHITE);
             labelRutas.setBounds(100, 10, 600, 30);
             panel2.add(labelRutas);
 
@@ -212,7 +318,7 @@
             JLabel labelReserva = new JLabel("Reserva de Asientos", SwingConstants.CENTER);
             labelReserva.setFont(new Font("Arial", Font.BOLD, 19));
             labelReserva.setOpaque(true);
-            labelReserva.setBackground(new Color(0, 0, 255));
+            labelReserva.setBackground(new Color(54, 107, 143));
             labelReserva.setForeground(Color.WHITE);
             labelReserva.setBounds(100, 10, 600, 30);
             panel4.add(labelReserva);
@@ -518,7 +624,7 @@
                 JLabel labelDetalle = new JLabel("Asientos Disponibles", SwingConstants.CENTER);
                 labelDetalle.setFont(new Font("Arial", Font.BOLD, 19));
                 labelDetalle.setOpaque(true);
-                labelDetalle.setBackground(new Color(0, 0, 255));
+                labelDetalle.setBackground(new Color(54, 107, 143));
                 labelDetalle.setForeground(Color.WHITE);
                 labelDetalle.setBounds(100, 10, 600, 30);
                 panel3.add(labelDetalle);

@@ -12,6 +12,9 @@ public class VentanaPrincipal extends JFrame {
 
     public VentanaPrincipal(List<LocalTime> horarios, List<Bus> buses, BaseDeDatos baseDeDatos) {
         configurarVentana(horarios, buses, baseDeDatos);
+
+        setIconImage(new ImageIcon(getClass().getResource("/images/logoBus.png")).getImage());
+        setVisible(true);
     }
 
     private void configurarVentana(List<LocalTime> horarios, List<Bus> buses, BaseDeDatos baseDeDatos) {
