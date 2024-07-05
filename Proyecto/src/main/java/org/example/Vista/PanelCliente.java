@@ -82,6 +82,8 @@
                     saloncamaLabelText.setText("$"+ salonprecio);
                 }
             }else{
+                origenLabelText.setText(origen.toString());
+                destinoLabelText.setText(destino.toString());
                 semicamaLabelText.setText("Cambie la ruta");
                 saloncamaLabelText.setText("Cambie la ruta");
             }

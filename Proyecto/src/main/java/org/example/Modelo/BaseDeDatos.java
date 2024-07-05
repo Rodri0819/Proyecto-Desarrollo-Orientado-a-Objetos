@@ -33,8 +33,8 @@ public class BaseDeDatos {
 
     private void cargarDatos() {
         // Crear buses
-        Bus bus1 = new SingleBus(28, "DX69-4");
-        Bus bus2 = new DoubleBus(40, "DXDY-5");
+        Bus bus1 = new SingleBus(28, "MicroBus");
+        Bus bus2 = new DoubleBus(40, "Bus");
 
         buses.add(bus1);
         buses.add(bus2);
@@ -55,14 +55,9 @@ public class BaseDeDatos {
         return rutasEncontradas;
     }
 
-    public boolean esMismaFecha(Date fecha1, Date fecha2) {
-        if (fecha1 == null || fecha2 == null) {
-            return false; // Si cualquiera de las fechas es nula, no pueden ser iguales.
-        }
-
-        return fecha1.toInstant().equals(fecha2.toInstant());
+    private boolean esMismaFecha(Date fecha1, Date fecha2) {
+        return fecha1.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().equals(fecha2.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate());
     }
-
 
     public List<Bus> getBuses() {
         return buses;

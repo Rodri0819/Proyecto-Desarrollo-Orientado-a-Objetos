@@ -1,0 +1,14 @@
+**Pasaje**
+
+Cliente: h h
+RUT: 216609077
+Email: q@gmail.com
+
+Origen: SANTIAGO
+Destino: CURANILAHUE
+Fecha: 2024-07-06
+Hora: 10:00
+Bus: Bus
+Asiento: 17 (Salón Cama)
+Precio Total: 16000
+
