@@ -17,7 +17,8 @@ import java.util.Date;
 import java.util.List;
 
 public class PanelAdmin extends JPanel {
-    private JPanel panel1, panel2, panel3;
+    // Otros atributos
+    private JPanel panel1, panel2, panel3, panel4;
     private JComboBox<LocalTime> comboBoxHorarios;
     private JComboBox<Ubicaciones> comboBoxOrigen;
     private JComboBox<Ubicaciones> comboBoxDestino;
@@ -27,6 +28,7 @@ public class PanelAdmin extends JPanel {
     private JPasswordField contrasenaField;
     private BaseDeDatos baseDeDatos;
     private String panelActual;
+    private JButton botonInforme, botonAsientos;
     private JComboBox<String> comboBoxInformeBuses;
     private JDateChooser dateChooser;
     private JButton botonCrearRecorrido, botonRegistrarPasaje;
@@ -38,16 +40,33 @@ public class PanelAdmin extends JPanel {
     private JComboBox<Ubicaciones> comboBoxDestinoCrear;
     private JComboBox<String> comboBoxBusesCrear;
     private JDateChooser dateChooserCrear;
+    private Ruta rutaSeleccionada;
 
     public PanelAdmin(List<LocalTime> horarios, List<Bus> buses, BaseDeDatos baseDeDatos) {
         this.baseDeDatos = BaseDeDatos.getInstance();
         setLayout(new CardLayout());
+        setBorder(BorderFactory.createLineBorder(Color.WHITE, 1, true));
         configurarPanel1();
         configurarPanel2(horarios, buses);
         configurarPanel3();
+        configurarPanel4();
         mostrarPanel1();
+
+        addComboBoxActionListener();
     }
 
+    private void addComboBoxActionListener() {
+        if (comboBoxHorarios != null) {
+            comboBoxHorarios.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Código del listener
+                }
+            });
+        } else {
+            System.out.println("Error: comboBoxHorarios no ha sido inicializado.");
+        }
+    }
 
     private void configurarPanel1() {
         panel1 = new JPanel();
@@ -118,31 +137,17 @@ public class PanelAdmin extends JPanel {
         Opciones.setBackground(new Color(200, 200, 200));
         panel2.add(Opciones);
 
-        JLabel labelRegistrarCliente = new JLabel("Registrar Cliente");
+        JLabel labelRegistrarCliente = new JLabel("Admin de Recorridos");
         labelRegistrarCliente.setFont(new Font("Arial", Font.BOLD, 15));
         labelRegistrarCliente.setBounds(10, 10, 200, 30);
         Opciones.add(labelRegistrarCliente);
 
-        botonRegistrarPasaje = new JButton("Registrar Pasaje");
+        botonRegistrarPasaje = new JButton("Ver recorridos");
         botonRegistrarPasaje.setBounds(10, 180, 250, 30);
         botonRegistrarPasaje.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Ubicaciones desdeUbicacion = (Ubicaciones) comboBoxOrigen.getSelectedItem();
-                Ubicaciones hastaUbicacion = (Ubicaciones) comboBoxDestino.getSelectedItem();
-                Date fechaSeleccionada = dateChooser.getDate();
-
-                if (desdeUbicacion == hastaUbicacion) {
-                    JOptionPane.showMessageDialog(PanelAdmin.this, "No puedes viajar hacia donde estás.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    rutas = baseDeDatos.obtenerRutas(desdeUbicacion, hastaUbicacion, fechaSeleccionada);
-                    if (!rutas.isEmpty()) {
-                        mostrarRutas(rutas);
-                        mostrarPanel3();
-                    } else {
-                        JOptionPane.showMessageDialog(PanelAdmin.this, "No se encontraron rutas para la selección.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+                buscarRutas();
             }
         });
         Opciones.add(botonRegistrarPasaje);
@@ -163,25 +168,25 @@ public class PanelAdmin extends JPanel {
         panel2.add(botonVolverPanel2);
 
         add(panel2, "Panel2");
-
-        // Inicializa comboBoxHorarios aquí
-        comboBoxHorarios = new JComboBox<>(horarios.toArray(new LocalTime[0]));
-        panel2.add(comboBoxHorarios); // Asegúrate de añadir el comboBox al panel
-
-        tablaRutas = new JTable();
-        tablaRutas.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int fila = tablaRutas.getSelectedRow();
-                    if (fila != -1) {
-                        Ruta rutaSeleccionada = rutas.get(fila);
-                    }
-                }
-            }
-        });
     }
 
+    private void buscarRutas() {
+        Ubicaciones desdeUbicacion = (Ubicaciones) comboBoxOrigen.getSelectedItem();
+        Ubicaciones hastaUbicacion = (Ubicaciones) comboBoxDestino.getSelectedItem();
+        Date fechaSeleccionada = dateChooser.getDate();
+
+        if (desdeUbicacion == hastaUbicacion) {
+            JOptionPane.showMessageDialog(this, "Elecciones iguales, por favor cambiar.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            rutas = baseDeDatos.obtenerRutas(desdeUbicacion, hastaUbicacion, fechaSeleccionada);
+            if (!rutas.isEmpty()) {
+                mostrarRutas(rutas);
+                mostrarPanel3();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontraron rutas para la selección.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 
     private void configurarPanel3() {
         panel3 = new JPanel();
@@ -196,11 +201,40 @@ public class PanelAdmin extends JPanel {
         labelDetalle.setBounds(100, 10, 600, 30);
         panel3.add(labelDetalle);
 
-        // Configura la tabla de rutas
         tablaRutas = new JTable();
         scrollPaneRutas = new JScrollPane(tablaRutas);
-        scrollPaneRutas.setBounds(100, 50, 600, 500);  // Ajusta según tus necesidades
+        scrollPaneRutas.setBounds(100, 50, 600, 500);
         panel3.add(scrollPaneRutas);
+
+        botonInforme = new JButton("Ver informe ruta");
+        botonInforme.setBounds(100, 560, 200, 30);
+        botonInforme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                descargarInforme();
+            }
+        });
+        panel3.add(botonInforme);
+
+        botonAsientos = new JButton("Quitar reserva asiento");
+        botonAsientos.setBounds(500, 560, 200, 30);
+        botonAsientos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada = tablaRutas.getSelectedRow();
+                if (filaSeleccionada != -1) {
+                    rutaSeleccionada = rutas.get(filaSeleccionada);
+                    if (rutaSeleccionada != null) {
+                        mostrarPanel4();
+                    } else {
+                        JOptionPane.showMessageDialog(panel3, "La ruta seleccionada no es válida.", "Error de selección", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(panel3, "Seleccione una ruta para ver los asientos.", "Sin selección", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        panel3.add(botonAsientos);
 
         JButton botonVolverPanel3 = new JButton("Volver");
         botonVolverPanel3.setFont(new Font("Arial", Font.BOLD, 20));
@@ -214,6 +248,114 @@ public class PanelAdmin extends JPanel {
         panel3.add(botonVolverPanel3);
 
         add(panel3, "Panel3");
+    }
+
+    private void configurarPanel4() {
+        panel4 = new JPanel();
+        panel4.setLayout(null);
+        panel4.setBackground(new Color(173, 216, 230));
+
+        JLabel labelDetalle = new JLabel("Asientos Disponibles", SwingConstants.CENTER);
+        labelDetalle.setFont(new Font("Arial", Font.BOLD, 19));
+        labelDetalle.setOpaque(true);
+        labelDetalle.setBackground(new Color(0, 0, 255));
+        labelDetalle.setForeground(Color.WHITE);
+        labelDetalle.setBounds(100, 10, 600, 30);
+        panel4.add(labelDetalle);
+
+        JLabel elegirAsiento = new JLabel("Presione el asiento que desea eliminar", SwingConstants.CENTER);
+        elegirAsiento.setFont(new Font("Arial", Font.BOLD, 19));
+        elegirAsiento.setBounds(100, 670, 600, 30);
+        panel4.add(elegirAsiento);
+
+        JButton botonVolverPanel4 = new JButton("Volver");
+        botonVolverPanel4.setFont(new Font("Arial", Font.BOLD, 20));
+        botonVolverPanel4.setBounds(288, 700, 200, 30);
+        botonVolverPanel4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel3(); // Regresar a la vista de rutas
+            }
+        });
+        panel4.add(botonVolverPanel4);
+
+        add(panel4, "Panel4");
+    }
+
+    public void quitarReservaAsiento(Asiento asiento) {
+        asiento.setEstado(true); // O el método apropiado para marcar el asiento como no reservado
+        JOptionPane.showMessageDialog(null, "Reserva del asiento " + asiento.getNumero() + " eliminada.", "Reserva Eliminada", JOptionPane.INFORMATION_MESSAGE);
+        actualizarVistaAsientos(); // Refrescar la vista de los asientos después de quitar la reserva
+    }
+
+    private void actualizarVistaAsientos() {
+        if (rutaSeleccionada != null) {
+            System.out.println("Mostrando asientos para la ruta: " + rutaSeleccionada); // Depuración
+            List<Asiento> asientos = rutaSeleccionada.getBus().getAsientos();
+            for (Asiento asiento : asientos) {
+                System.out.println("Asiento: " + asiento); // Depuración
+            }
+            panel4.removeAll(); // Limpiar el panel antes de agregar nuevos componentes
+
+            // Reconfigurar la vista de asientos
+            Asientos asientosPanel = new Asientos(asientos, rutaSeleccionada.getBus(), this);
+            asientosPanel.setBounds(100, 50, 600, 600);
+            asientosPanel.setBackground(new Color(173, 216, 230));
+            panel4.add(asientosPanel);
+
+            // Volver a agregar los botones y etiquetas adicionales
+            JLabel labelDetalle = new JLabel("Asientos Disponibles", SwingConstants.CENTER);
+            labelDetalle.setFont(new Font("Arial", Font.BOLD, 19));
+            labelDetalle.setOpaque(true);
+            labelDetalle.setBackground(new Color(0, 0, 255));
+            labelDetalle.setForeground(Color.WHITE);
+            labelDetalle.setBounds(100, 10, 600, 30);
+            panel4.add(labelDetalle);
+
+            JLabel elegirAsiento = new JLabel("Presione el asiento que desea eliminar", SwingConstants.CENTER);
+            elegirAsiento.setFont(new Font("Arial", Font.BOLD, 19));
+            elegirAsiento.setBounds(100, 670, 600, 30);
+            panel4.add(elegirAsiento);
+
+            JButton botonVolverPanel4 = new JButton("Volver");
+            botonVolverPanel4.setFont(new Font("Arial", Font.BOLD, 20));
+            botonVolverPanel4.setBounds(288, 700, 200, 30);
+            botonVolverPanel4.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mostrarPanel3(); // Regresar a la vista de rutas
+                }
+            });
+            panel4.add(botonVolverPanel4);
+
+            panel4.revalidate();
+            panel4.repaint();
+        } else {
+            System.out.println("No hay ruta seleccionada para mostrar asientos.");
+        }
+        System.out.println("Dimensiones del panel4: " + panel4.getWidth() + "x" + panel4.getHeight());
+    }
+
+    private void descargarInforme() {
+        int filaSeleccionada = tablaRutas.getSelectedRow();
+        if (filaSeleccionada != -1) { // Asegúrate de que hay una fila seleccionada
+            Ruta rutaSeleccionada = rutas.get(filaSeleccionada); // Accede a la ruta seleccionada
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss"); // Formato de fecha y hora
+            String horaInfore = sdf.format(new Date()); // Obtén la fecha y hora actual
+
+            // Construye la ruta del archivo usando la ruta específica en tu sistema, incluyendo la fecha y hora
+            String nombreArchivo = "informeruta\\InformeDeRuta_" + rutaSeleccionada.getOrigen() + "_to_" + rutaSeleccionada.getDestino() + "_" + horaInfore + ".txt";
+
+            try {
+                InformeDeRuta informe = new InformeDeRuta(rutaSeleccionada, nombreArchivo);
+                informe.generarInforme();
+                JOptionPane.showMessageDialog(this, "Informe generado correctamente en: " + nombreArchivo, "Informe Generado", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error al generar el informe: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione una ruta de la tabla.", "Error", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private void mostrarRutas(List<Ruta> rutas) {
@@ -336,6 +478,7 @@ public class PanelAdmin extends JPanel {
         });
         panel.add(botonCrearRecorrido);
     }
+
     private void agregarHorariosCrear(JPanel panel, List<LocalTime> horarios) {
         comboBoxHorariosCrear = new JComboBox<>(horarios.toArray(new LocalTime[0]));
         comboBoxHorariosCrear.setBounds(10, 50, 200, 30);
@@ -371,6 +514,7 @@ public class PanelAdmin extends JPanel {
         comboBoxBusesCrear.setBounds(10, 150, 200, 30);
         panel.add(comboBoxBusesCrear);
     }
+
     private void agregarBusesInforme(JPanel panel, List<Bus> buses) {
         JButton botonDescargarInforme = new JButton("Descargar Informe");
         botonDescargarInforme.setFont(new Font("Arial", Font.BOLD, 15));
@@ -434,8 +578,6 @@ public class PanelAdmin extends JPanel {
         }
     }
 
-
-
     public void addComboBoxActionListener(ActionListener listener) {
         comboBoxHorarios.addActionListener(listener);
     }
@@ -455,7 +597,13 @@ public class PanelAdmin extends JPanel {
     private void mostrarPanel3() {
         CardLayout cl = (CardLayout) getLayout();
         cl.show(this, "Panel3");
-        panelActual = "Panel3";
+        panelActual = ("Panel3");
+    }
+
+    private void mostrarPanel4() {
+        actualizarVistaAsientos(); // Asegúrate de actualizar la vista de asientos
+        CardLayout cl = (CardLayout) getLayout();
+        cl.show(this, "Panel4");
     }
 
     public Ubicaciones getUbicacionDesde() {

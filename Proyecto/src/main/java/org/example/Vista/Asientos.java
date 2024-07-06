@@ -13,6 +13,7 @@ public class Asientos extends JPanel {
     private List<Asiento> asientos;
     private Bus bus;
     private PanelCliente panelCliente;
+    private PanelAdmin panelAdmin;
 
     public Asientos(List<Asiento> asientos, Bus bus, PanelCliente panelCliente) {
         this.asientos = asientos;
@@ -22,8 +23,17 @@ public class Asientos extends JPanel {
         actualizarAsientos();
     }
 
+    public Asientos(List<Asiento> asientos, Bus bus, PanelAdmin panelAdmin) {
+        this.asientos = asientos;
+        this.bus = bus;
+        this.panelAdmin = panelAdmin;
+        setLayout(null);
+        actualizarAsientos();
+    }
+
     private void actualizarAsientos() {
         removeAll();
+        System.out.println("Actualizando asientos...");
 
         int x1 = 70;
         int x2 = 130;
@@ -41,7 +51,7 @@ public class Asientos extends JPanel {
             botonAsiento.setPreferredSize(new Dimension(ancho, alto));
 
             if (asiento.isEstado()) {
-                if (asiento.getCategoria()=="Semi Cama") {
+                if (asiento.getCategoria().equals("Semi Cama")) {
                     botonAsiento.setBackground(new Color(0x53E131));
                 } else {
                     botonAsiento.setBackground(new Color(0x239A64));
@@ -55,7 +65,14 @@ public class Asientos extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        if (asiento.isEstado()) {
+                        if (panelAdmin != null) {
+                            if (!asiento.isEstado()) { // Si el asiento está reservado
+                                panelAdmin.quitarReservaAsiento(asiento);
+                                actualizarAsientos();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "El asiento no está reservado.", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else if (asiento.isEstado() && panelCliente != null) {
                             panelCliente.setAsientoSeleccionado(asiento);
                             panelCliente.mostrarPanel4();
                         } else {
@@ -83,5 +100,6 @@ public class Asientos extends JPanel {
 
         revalidate();
         repaint();
+        System.out.println("Asientos actualizados.");
     }
 }

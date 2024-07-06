@@ -1,0 +1,95 @@
+**Informe de Ruta**
+
+Origen: LOS_ANGELES
+Destino: CONCEPCION
+Fecha: 2024-07-06
+Hora: 18:00
+Bus: DX69-4
+
+Asientos y Pasajeros:
+Asiento: 1 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 2 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 3 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 4 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 5 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 6 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 7 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 8 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 9 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 10 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 11 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 12 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 13 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 14 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 15 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 16 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 17 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 18 - Semi Cama
+  Cliente: asd asd
+  RUT: 216525477
+  Email: adasdadg@ga.com
+
+Asiento: 19 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 20 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 21 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 22 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 23 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 24 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 25 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 26 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 27 - Semi Cama
+  Cliente: No reservado
+
+Asiento: 28 - Semi Cama
+  Cliente: No reservado
+

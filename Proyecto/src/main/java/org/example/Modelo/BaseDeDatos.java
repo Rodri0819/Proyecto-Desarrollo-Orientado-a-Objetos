@@ -33,8 +33,8 @@ public class BaseDeDatos {
 
     private void cargarDatos() {
         // Crear buses
-        Bus bus1 = new SingleBus(28, "MicroBus");
-        Bus bus2 = new DoubleBus(40, "Bus");
+        Bus bus1 = new SingleBus(28, "DX69-4");
+        Bus bus2 = new DoubleBus(40, "DXDY-5");
 
         buses.add(bus1);
         buses.add(bus2);
