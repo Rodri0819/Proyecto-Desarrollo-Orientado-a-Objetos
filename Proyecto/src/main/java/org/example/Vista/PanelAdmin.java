@@ -2,7 +2,6 @@ package org.example.Vista;
 
 import com.toedter.calendar.JDateChooser;
 import org.example.Modelo.*;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -16,8 +15,11 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * La clase {@code PanelAdmin} representa la interfaz gráfica del panel de administración
+ * para gestionar rutas, asientos y generar informes.
+ */
 public class PanelAdmin extends JPanel {
-    // Otros atributos
     private JPanel panel1, panel2, panel3, panel4;
     private JComboBox<LocalTime> comboBoxHorarios;
     private JComboBox<Ubicaciones> comboBoxOrigen;
@@ -31,9 +33,9 @@ public class PanelAdmin extends JPanel {
     private JComboBox<String> comboBoxInformeBuses;
     private JDateChooser dateChooser;
     private JButton botonCrearRecorrido, botonRegistrarPasaje;
-    private List<Ruta> rutas;  // Definición de la variable de instancia para almacenar rutas
-    private JScrollPane scrollPaneRutas;  // Si deseas hacer la tabla desplazable
-    private JTable tablaRutas; // Define la tabla aquí como variable de instancia
+    private List<Ruta> rutas;
+    private JScrollPane scrollPaneRutas;
+    private JTable tablaRutas;
     private JComboBox<LocalTime> comboBoxHorariosCrear;
     private JComboBox<Ubicaciones> comboBoxOrigenCrear;
     private JComboBox<Ubicaciones> comboBoxDestinoCrear;
@@ -41,6 +43,13 @@ public class PanelAdmin extends JPanel {
     private JDateChooser dateChooserCrear;
     private Ruta rutaSeleccionada;
 
+    /**
+     * Crea una instancia de {@code PanelAdmin} con los horarios, buses y base de datos especificados.
+     *
+     * @param horarios la lista de horarios disponibles.
+     * @param buses la lista de buses disponibles.
+     * @param baseDeDatos la instancia de la base de datos.
+     */
     public PanelAdmin(List<LocalTime> horarios, List<Bus> buses, BaseDeDatos baseDeDatos) {
         this.baseDeDatos = BaseDeDatos.getInstance();
         setLayout(new CardLayout());
@@ -52,6 +61,9 @@ public class PanelAdmin extends JPanel {
         mostrarPanel1();
     }
 
+    /**
+     * Añade un listener al comboBox de horarios.
+     */
     private void addComboBoxActionListener() {
         if (comboBoxHorarios != null) {
             comboBoxHorarios.addActionListener(new ActionListener() {
@@ -65,6 +77,9 @@ public class PanelAdmin extends JPanel {
         }
     }
 
+    /**
+     * Configura el primer panel (login).
+     */
     private void configurarPanel1() {
         panel1 = new JPanel();
         panel1.setLayout(null);
@@ -111,6 +126,12 @@ public class PanelAdmin extends JPanel {
         add(panel1, "Panel1");
     }
 
+    /**
+     * Configura el segundo panel (gestión de recorridos).
+     *
+     * @param horarios la lista de horarios disponibles.
+     * @param buses la lista de buses disponibles.
+     */
     private void configurarPanel2(List<LocalTime> horarios, List<Bus> buses) {
         panel2 = new JPanel();
         panel2.setLayout(null);
@@ -164,7 +185,6 @@ public class PanelAdmin extends JPanel {
         agregarOrigen(Opciones);
         agregarDestino(Opciones);
 
-        // Inicialización de comboBoxHorarios en configurarPanel2
         comboBoxHorarios = new JComboBox<>(horarios.toArray(new LocalTime[0]));
         comboBoxHorarios.setBounds(10, 50, 200, 30);
         Opciones.add(comboBoxHorarios);
@@ -186,6 +206,9 @@ public class PanelAdmin extends JPanel {
         add(panel2, "Panel2");
     }
 
+    /**
+     * Busca rutas basadas en las selecciones del usuario y actualiza la tabla de rutas.
+     */
     private void buscarRutas() {
         Ubicaciones desdeUbicacion = (Ubicaciones) comboBoxOrigen.getSelectedItem();
         Ubicaciones hastaUbicacion = (Ubicaciones) comboBoxDestino.getSelectedItem();
@@ -204,10 +227,13 @@ public class PanelAdmin extends JPanel {
         }
     }
 
+    /**
+     * Configura el tercer panel (visualización de rutas).
+     */
     private void configurarPanel3() {
         panel3 = new JPanel();
         panel3.setLayout(null);
-        panel3.setBackground(new Color(173, 216, 230));
+        panel3.setBackground(new Color(114, 206, 206));
 
         JLabel labelDetalle = new JLabel("Rutas Disponibles", SwingConstants.CENTER);
         labelDetalle.setFont(new Font("Arial", Font.BOLD, 19));
@@ -269,10 +295,13 @@ public class PanelAdmin extends JPanel {
         add(panel3, "Panel3");
     }
 
+    /**
+     * Configura el cuarto panel (visualización de asientos).
+     */
     private void configurarPanel4() {
         panel4 = new JPanel();
         panel4.setLayout(null);
-        panel4.setBackground(new Color(173, 216, 230));
+        panel4.setBackground(new Color(114, 206, 206));
 
         JLabel labelDetalle = new JLabel("Asientos Disponibles", SwingConstants.CENTER);
         labelDetalle.setFont(new Font("Arial", Font.BOLD, 19));
@@ -302,12 +331,20 @@ public class PanelAdmin extends JPanel {
         add(panel4, "Panel4");
     }
 
+    /**
+     * Quita la reserva de un asiento y actualiza la vista.
+     *
+     * @param asiento el asiento cuya reserva se quiere quitar.
+     */
     public void quitarReservaAsiento(Asiento asiento) {
         asiento.setEstado(true); // O el método apropiado para marcar el asiento como no reservado
         JOptionPane.showMessageDialog(null, "Reserva del asiento " + asiento.getNumero() + " eliminada.", "Reserva Eliminada", JOptionPane.INFORMATION_MESSAGE);
         actualizarVistaAsientos(); // Refrescar la vista de los asientos después de quitar la reserva
     }
 
+    /**
+     * Actualiza la vista de los asientos en el panel.
+     */
     private void actualizarVistaAsientos() {
         if (rutaSeleccionada != null) {
             System.out.println("Mostrando asientos para la ruta: " + rutaSeleccionada); // Depuración
@@ -320,7 +357,7 @@ public class PanelAdmin extends JPanel {
             // Reconfigurar la vista de asientos
             Asientos asientosPanel = new Asientos(asientos, rutaSeleccionada.getBus(), this);
             asientosPanel.setBounds(100, 50, 600, 600);
-            asientosPanel.setBackground(new Color(173, 216, 230));
+            asientosPanel.setBackground(new Color(114, 206, 206));
             panel4.add(asientosPanel);
 
             // Volver a agregar los botones y etiquetas adicionales
@@ -357,28 +394,35 @@ public class PanelAdmin extends JPanel {
         System.out.println("Dimensiones del panel4: " + panel4.getWidth() + "x" + panel4.getHeight());
     }
 
+    /**
+     * Descarga el informe de la ruta seleccionada.
+     */
     private void descargarInforme() {
         int filaSeleccionada = tablaRutas.getSelectedRow();
-        if (filaSeleccionada != -1) { // Asegúrate de que hay una fila seleccionada
-            Ruta rutaSeleccionada = rutas.get(filaSeleccionada); // Accede a la ruta seleccionada
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss"); // Formato de fecha y hora
-            String horaInfore = sdf.format(new Date()); // Obtén la fecha y hora actual
+        if (filaSeleccionada != -1) {
+            Ruta rutaSeleccionada = rutas.get(filaSeleccionada);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            String horaInfore = sdf.format(new Date());
 
-            // Construye la ruta del archivo usando la ruta específica en tu sistema, incluyendo la fecha y hora
             String nombreArchivo = "informeruta\\InformeDeRuta_" + rutaSeleccionada.getOrigen() + "_to_" + rutaSeleccionada.getDestino() + "_" + horaInfore + ".txt";
 
             try {
                 InformeDeRuta informe = new InformeDeRuta(rutaSeleccionada, nombreArchivo);
                 informe.generarInforme();
-                JOptionPane.showMessageDialog(this, "Informe generado correctamente" , "Informe Generado", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Informe generado correctamente", "Informe Generado", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error al generar el informe" , "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error al generar el informe", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Por favor seleccione una ruta de la tabla.", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 
+    /**
+     * Muestra las rutas en la tabla.
+     *
+     * @param rutas la lista de rutas a mostrar.
+     */
     private void mostrarRutas(List<Ruta> rutas) {
         String[] columnNames = {"Origen", "Destino", "Fecha", "Hora", "Bus"};
         Object[][] data = new Object[rutas.size()][5];
@@ -389,7 +433,7 @@ public class PanelAdmin extends JPanel {
             data[i][0] = ruta.getOrigen();
             data[i][1] = ruta.getDestino();
             data[i][2] = dateFormat.format(ruta.getFecha());
-            data[i][3] = ruta.getHoraFormateada(); // Usar getHoraFormateada para obtener la hora formateada
+            data[i][3] = ruta.getHoraFormateada();
             data[i][4] = ruta.getBus().getId();
         }
 
@@ -436,6 +480,11 @@ public class PanelAdmin extends JPanel {
         });
     }
 
+    /**
+     * Agrega una etiqueta al panel.
+     *
+     * @param panel el panel al que se agregará la etiqueta.
+     */
     private void agregarLabel(JPanel panel) {
         JLabel opciones = new JLabel("Crear recorrido");
         opciones.setFont(new Font("Arial", Font.BOLD, 15));
@@ -452,6 +501,11 @@ public class PanelAdmin extends JPanel {
         panel.add(destino);
     }
 
+    /**
+     * Agrega un selector de fecha al panel.
+     *
+     * @param panel el panel al que se agregará el selector de fecha.
+     */
     private void agregarFecha(JPanel panel) {
         dateChooser = new JDateChooser();
         dateChooser.setBounds(10, 50, 200, 30);
@@ -459,18 +513,33 @@ public class PanelAdmin extends JPanel {
         panel.add(dateChooser);
     }
 
+    /**
+     * Agrega un comboBox de origen al panel.
+     *
+     * @param panel el panel al que se agregará el comboBox de origen.
+     */
     private void agregarOrigen(JPanel panel) {
         comboBoxOrigen = new JComboBox<>(Ubicaciones.values());
         comboBoxOrigen.setBounds(220, 50, 200, 30);
         panel.add(comboBoxOrigen);
     }
 
+    /**
+     * Agrega un comboBox de destino al panel.
+     *
+     * @param panel el panel al que se agregará el comboBox de destino.
+     */
     private void agregarDestino(JPanel panel) {
         comboBoxDestino = new JComboBox<>(Ubicaciones.values());
         comboBoxDestino.setBounds(220, 100, 200, 30);
         panel.add(comboBoxDestino);
     }
 
+    /**
+     * Configura los botones de opciones en el panel.
+     *
+     * @param panel el panel en el que se configurarán los botones.
+     */
     private void configurarBotonesOpciones(JPanel panel) {
         botonCrearRecorrido = new JButton("Crear Recorrido");
         botonCrearRecorrido.setBounds(10, 240, 250, 30);
@@ -484,31 +553,58 @@ public class PanelAdmin extends JPanel {
         panel.add(botonCrearRecorrido);
     }
 
+    /**
+     * Agrega un comboBox de horarios al panel para crear recorridos.
+     *
+     * @param panel el panel al que se agregará el comboBox de horarios.
+     * @param horarios la lista de horarios disponibles.
+     */
     private void agregarHorariosCrear(JPanel panel, List<LocalTime> horarios) {
         comboBoxHorariosCrear = new JComboBox<>(horarios.toArray(new LocalTime[0]));
         comboBoxHorariosCrear.setBounds(10, 50, 200, 30);
         panel.add(comboBoxHorariosCrear);
     }
 
+    /**
+     * Agrega un selector de fecha al panel para crear recorridos.
+     *
+     * @param panel el panel al que se agregará el selector de fecha.
+     */
     private void agregarFechaCrear(JPanel panel) {
         dateChooserCrear = new JDateChooser();
         dateChooserCrear.setBounds(10, 100, 200, 30);
-        dateChooserCrear.setMinSelectableDate(new Date());  // Deshabilitar fechas pasadas
+        dateChooserCrear.setMinSelectableDate(new Date());
         panel.add(dateChooserCrear);
     }
 
+    /**
+     * Agrega un comboBox de origen al panel para crear recorridos.
+     *
+     * @param panel el panel al que se agregará el comboBox de origen.
+     */
     private void agregarOrigenCrear(JPanel panel) {
         comboBoxOrigenCrear = new JComboBox<>(Ubicaciones.values());
         comboBoxOrigenCrear.setBounds(220, 50, 200, 30);
         panel.add(comboBoxOrigenCrear);
     }
 
+    /**
+     * Agrega un comboBox de destino al panel para crear recorridos.
+     *
+     * @param panel el panel al que se agregará el comboBox de destino.
+     */
     private void agregarDestinoCrear(JPanel panel) {
         comboBoxDestinoCrear = new JComboBox<>(Ubicaciones.values());
         comboBoxDestinoCrear.setBounds(220, 100, 200, 30);
         panel.add(comboBoxDestinoCrear);
     }
 
+    /**
+     * Agrega un comboBox de buses al panel para crear recorridos.
+     *
+     * @param panel el panel al que se agregará el comboBox de buses.
+     * @param buses la lista de buses disponibles.
+     */
     private void agregarBusesCrear(JPanel panel, List<Bus> buses) {
         String[] idsDeBuses = new String[buses.size()];
         for (int i = 0; i < buses.size(); i++) {
@@ -520,11 +616,18 @@ public class PanelAdmin extends JPanel {
         panel.add(comboBoxBusesCrear);
     }
 
-
+    /**
+     * Obtiene el horario seleccionado en el comboBox de horarios.
+     *
+     * @return el horario seleccionado.
+     */
     public LocalTime getHorarioSeleccionado() {
         return (LocalTime) comboBoxHorarios.getSelectedItem();
     }
 
+    /**
+     * Crea un nuevo recorrido basado en las selecciones del usuario.
+     */
     public void crearRecorrido() {
         LocalTime horarioSeleccionado = (LocalTime) comboBoxHorariosCrear.getSelectedItem();
         Ubicaciones origenSeleccionado = (Ubicaciones) comboBoxOrigenCrear.getSelectedItem();
@@ -548,30 +651,47 @@ public class PanelAdmin extends JPanel {
         }
     }
 
+    /**
+     * Añade un listener al comboBox de horarios.
+     *
+     * @param listener el listener a añadir.
+     */
     public void addComboBoxActionListener(ActionListener listener) {
         comboBoxHorarios.addActionListener(listener);
     }
 
+    /**
+     * Muestra el primer panel (login).
+     */
     private void mostrarPanel1() {
         CardLayout cl = (CardLayout) getLayout();
         cl.show(this, "Panel1");
         panelActual = "Panel1";
     }
 
+    /**
+     * Muestra el segundo panel (gestión de recorridos).
+     */
     private void mostrarPanel2() {
         CardLayout cl = (CardLayout) getLayout();
         cl.show(this, "Panel2");
         panelActual = "Panel2";
     }
 
+    /**
+     * Muestra el tercer panel (visualización de rutas).
+     */
     private void mostrarPanel3() {
         CardLayout cl = (CardLayout) getLayout();
         cl.show(this, "Panel3");
         panelActual = ("Panel3");
     }
 
+    /**
+     * Muestra el cuarto panel (visualización de asientos).
+     */
     private void mostrarPanel4() {
-        actualizarVistaAsientos(); // Asegúrate de actualizar la vista de asientos
+        actualizarVistaAsientos();
         CardLayout cl = (CardLayout) getLayout();
         cl.show(this, "Panel4");
     }

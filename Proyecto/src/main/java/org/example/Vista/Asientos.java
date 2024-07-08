@@ -2,19 +2,30 @@ package org.example.Vista;
 
 import org.example.Modelo.Asiento;
 import org.example.Modelo.Bus;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * La clase representa un panel de visualización de asientos de un bus,
+ * permitiendo la interacción para reservar y liberar asientos.
+ * Esta clase se integra con los paneles de cliente y administrador para manejar las acciones
+ * relacionadas con los asientos.
+ */
 public class Asientos extends JPanel {
     private List<Asiento> asientos;
     private Bus bus;
     private PanelCliente panelCliente;
     private PanelAdmin panelAdmin;
 
+    /**
+     * Crea una instancia de {@code Asientos} para el panel del cliente.
+     * @param asientos la lista de asientos del bus.
+     * @param bus el bus asociado a los asientos.
+     * @param panelCliente el panel del cliente para manejar las interacciones de reserva.
+     */
     public Asientos(List<Asiento> asientos, Bus bus, PanelCliente panelCliente) {
         this.asientos = asientos;
         this.bus = bus;
@@ -23,6 +34,12 @@ public class Asientos extends JPanel {
         actualizarAsientos();
     }
 
+    /**
+     * Crea una instancia de {@code Asientos} para el panel del administrador.
+     * @param asientos la lista de asientos del bus.
+     * @param bus el bus asociado a los asientos.
+     * @param panelAdmin el panel del administrador para manejar las interacciones de reserva.
+     */
     public Asientos(List<Asiento> asientos, Bus bus, PanelAdmin panelAdmin) {
         this.asientos = asientos;
         this.bus = bus;
@@ -31,6 +48,10 @@ public class Asientos extends JPanel {
         actualizarAsientos();
     }
 
+    /**
+     * Actualiza la visualización de los asientos en el panel, configurando sus estados y
+     * añadiendo los correspondientes listeners para las acciones de reserva y liberación.
+     */
     private void actualizarAsientos() {
         removeAll();
         System.out.println("Actualizando asientos...");
@@ -60,7 +81,7 @@ public class Asientos extends JPanel {
                 botonAsiento.setBackground(new Color(0xCE1D1D));
             }
 
-            // Agregar ActionListener al botón
+
             botonAsiento.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

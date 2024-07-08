@@ -3,7 +3,6 @@ package org.example.Modelo;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -13,9 +12,6 @@ class BaseDeDatosTest {
 
     @BeforeEach
     void setUp() {
-        // Como la clase BaseDeDatos usa un patrón Singleton, debemos asegurarnos de que no arrastre estado entre tests.
-        // Esto es un desafío aquí porque el constructor es privado y mantiene un estado global único. Para un test unitario real,
-        // se debería modificar la clase para permitir resetear el estado o usar reflexión para acceder al constructor privado y crear nuevas instancias.
         baseDeDatos = BaseDeDatos.getInstance();
     }
 
@@ -33,8 +29,7 @@ class BaseDeDatosTest {
 
     @Test
     void testObtenerRutas() {
-        // Se asume la existencia de rutas y buses ya cargados en el método cargarDatos() y generarRutas().
-        Date fecha = new Date(); // Asumimos que la fecha de hoy tiene rutas generadas
+        Date fecha = new Date();
         List<Ruta> rutas = baseDeDatos.obtenerRutas(Ubicaciones.LOS_ANGELES, Ubicaciones.SANTIAGO, fecha);
         assertFalse(rutas.isEmpty(), "Debería encontrar rutas para las ubicaciones y fecha dadas");
     }
@@ -49,8 +44,8 @@ class BaseDeDatosTest {
 
     @Test
     void testGetBusPorId() {
-        Bus bus = baseDeDatos.getBusPorId("DX69-4");
-        assertNotNull(bus, "Debería encontrar un bus con el ID especificado");
-        assertNull(baseDeDatos.getBusPorId("ID_NO_EXISTE"), "No debería encontrar un bus con un ID inexistente");
+        Bus bus = baseDeDatos.getBusPorId("MicroBus");
+        assertNotNull(bus, "Debería encontrar un bus con el tipo especificado");
+        assertNull(baseDeDatos.getBusPorId("TIPO_NO_EXISTE"), "No debería encontrar un bus con un tipo inexistente");
     }
 }

@@ -3,13 +3,11 @@ package org.example.Modelo;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 class BusTest {
     private Bus bus;
 
     @BeforeEach
     void setUp() {
-        // Instancia una subclase concreta de Bus para los tests
         bus = new Bus(2, "BUS-123") {
             @Override
             public Bus clone() {
@@ -17,7 +15,6 @@ class BusTest {
             }
         };
 
-        // Agrega algunos asientos para probar
         bus.agregarAsiento(new Asiento(1, "Económica", true));
         bus.agregarAsiento(new Asiento(2, "Económica", true));
     }

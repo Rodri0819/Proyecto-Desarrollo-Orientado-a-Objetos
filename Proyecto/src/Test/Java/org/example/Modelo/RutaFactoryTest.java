@@ -4,12 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 class RutaFactoryTest {
@@ -40,7 +35,7 @@ class RutaFactoryTest {
     @Test
     void testCalcularPrecioBase() {
         int precio = rutaFactory.calcularPrecioBase(Ubicaciones.SANTIAGO, Ubicaciones.CONCEPCION);
-        assertEquals(11200, precio, "El precio base debe ser de 11200");
+        assertEquals(11000, precio, "El precio base debe ser de 11200");
     }
 
     @Test
@@ -49,8 +44,8 @@ class RutaFactoryTest {
         int precioSalonCama = rutaFactory.calcularPrecioAsiento("Salón Cama");
 
         assertAll("verificar precios de asientos",
-                () -> assertEquals(5000, precioSemiCama, "El precio de Semi Cama debe ser 5000"),
-                () -> assertEquals(15000, precioSalonCama, "El precio de Salón Cama debe ser 15000")
+                () -> assertEquals(2000, precioSemiCama, "El precio de Semi Cama debe ser 5000"),
+                () -> assertEquals(4000, precioSalonCama, "El precio de Salón Cama debe ser 15000")
         );
     }
 

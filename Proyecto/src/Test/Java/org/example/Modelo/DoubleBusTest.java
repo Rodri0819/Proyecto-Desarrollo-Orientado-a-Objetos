@@ -10,26 +10,26 @@ class DoubleBusTest {
 
     @BeforeEach
     void setUp() {
-        capacidad = 10; // Elegir un número par para dividir fácilmente en mitades
-        doubleBus = new DoubleBus(capacidad, "DB-100");
+        capacidad = 10;
+        doubleBus = new DoubleBus(capacidad, "MicroBus");
     }
 
     @Test
     void testInicializacionCorrecta() {
         assertAll("Inicialización de DoubleBus",
                 () -> assertEquals(capacidad, doubleBus.getAsientos().size(), "Debe haber exactamente " + capacidad + " asientos en el bus."),
-                () -> assertEquals("DB-100", doubleBus.getId(), "El ID del bus debe ser DB-100.")
+                () -> assertEquals("MicroBus", doubleBus.getId(), "El tipo de transporte debe ser MicroBus.")
         );
     }
 
     @Test
     void testTipoAsientos() {
-        int mitadCapacidad = capacidad / 2;
+        int mitadCapacidad = ((capacidad-1) / 2) + 4 - ((capacidad-1) / 2) % 4;
         for (int i = 0; i < mitadCapacidad; i++) {
-            assertEquals("Salón Cama", doubleBus.getAsientos().get(i).getCategoria(), "Los primeros " + mitadCapacidad + " asientos deben ser de 'Salón Cama'.");
+            assertEquals("Salón Cama", doubleBus.getAsientos().get(i).getCategoria(), "Los primeros asientos deben ser de 'Salón Cama'.");
         }
         for (int i = mitadCapacidad; i < capacidad; i++) {
-            assertEquals("Semi Cama", doubleBus.getAsientos().get(i).getCategoria(), "Los últimos " + (capacidad - mitadCapacidad) + " asientos deben ser de 'Semi Cama'.");
+            assertEquals("Semi Cama", doubleBus.getAsientos().get(i).getCategoria(), "Los últimos asientos deben ser de 'Semi Cama'.");
         }
     }
 

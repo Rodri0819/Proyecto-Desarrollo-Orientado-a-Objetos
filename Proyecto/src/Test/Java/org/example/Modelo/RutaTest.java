@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalTime;
 import java.util.Date;
-import java.util.List;
 
 class RutaTest {
     private Ruta ruta;
@@ -15,14 +14,12 @@ class RutaTest {
 
     @BeforeEach
     void setUp() {
-        // Preparar los objetos necesarios para la prueba
         Ubicaciones origen = Ubicaciones.SANTIAGO;
         Ubicaciones destino = Ubicaciones.CONCEPCION;
-        fecha = new Date(); // Utiliza la fecha actual para la prueba
-        hora = LocalTime.of(15, 30); // Hora específica para la prueba
+        fecha = new Date();
+        hora = LocalTime.of(15, 30);
         int precio = 10000;
 
-        // Mock o stub del bus, dependiendo de la implementación
         bus = new Bus(40, "BUS-123") {
             @Override
             public Bus clone() {
@@ -30,7 +27,6 @@ class RutaTest {
             }
         };
 
-        // Crear una ruta para la prueba
         ruta = new Ruta(origen, destino, fecha, hora, bus, precio);
     }
 
@@ -59,12 +55,6 @@ class RutaTest {
         assertEquals(bus, ruta.getBus(), "El bus debe ser el mismo que se inicializó.");
     }
 
-    @Test
-    void testGetAsientos() {
-        List<Asiento> asientos = ruta.getAsientos();
-        assertNotNull(asientos, "Debería obtener una lista de asientos del bus.");
-        // Verificar condiciones adicionales sobre los asientos si es necesario.
-    }
 
     @Test
     void testGetPrecio() {

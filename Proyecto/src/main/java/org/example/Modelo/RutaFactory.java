@@ -3,19 +3,40 @@ package org.example.Modelo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * La clase se encarga de crear rutas de viaje basadas en los
+ * parámetros de origen, destino y número de días.
+ * Utiliza una lista de buses para generar las rutas, asignando horarios y calculando
+ * los precios de los viajes.
+ */
 public class RutaFactory {
     private List<Bus> buses;
 
+    /**
+     * Crea una instancia de {@code RutaFactory} con la lista de buses especificada.
+     * @param buses la lista de buses disponible para crear rutas.
+     */
     public RutaFactory(List<Bus> buses) {
         this.buses = buses;
     }
 
+    /**
+     * Crea una lista de rutas entre dos ubicaciones durante un número específico de días.
+     * Genera horarios para las rutas desde las 8:00 AM hasta las 10:00 PM, asegurando
+     * que no se exceda la capacidad de los buses disponibles.
+     *
+     * @param origen la ubicación de origen de las rutas.
+     * @param destino la ubicación de destino de las rutas.
+     * @param dias el número de días para generar rutas.
+     * @return una lista de rutas generadas.
+     * @throws IllegalArgumentException si el origen o destino son nulos, o si el número de días es menor o igual a cero.
+     * @throws IllegalStateException si no hay buses disponibles para crear rutas.
+     */
     public List<Ruta> crearRutas(Ubicaciones origen, Ubicaciones destino, int dias) {
         if (origen == null || destino == null) {
             throw new IllegalArgumentException("Origen y destino no pueden ser nulos");
@@ -60,11 +81,17 @@ public class RutaFactory {
                 // Incrementar la hora en una hora
                 current = current.plusHours(1);
             }
-
         }
 
         return rutas;
     }
+
+    /**
+     * Calcula el precio base de un viaje entre dos ubicaciones.
+     * @param origen la ubicación de origen.
+     * @param destino la ubicación de destino.
+     * @return el precio base del viaje.
+     */
     public static int calcularPrecioBase(Ubicaciones origen, Ubicaciones destino) {
         // Definir precios entre ubicaciones
         if (origen == Ubicaciones.LOS_ANGELES && destino == Ubicaciones.SANTIAGO) {
@@ -96,6 +123,11 @@ public class RutaFactory {
         }
     }
 
+    /**
+     * Calcula el precio adicional de un asiento según su categoría.
+     * @param categoria la categoría del asiento (por ejemplo, "Semi Cama" o "Salón Cama").
+     * @return el precio adicional del asiento.
+     */
     public int calcularPrecioAsiento(String categoria) {
         if (categoria.equals("Semi Cama")) {
             return 2000;
@@ -106,6 +138,13 @@ public class RutaFactory {
         }
     }
 
+    /**
+     * Calcula el precio total de un viaje, incluyendo el precio base y el precio de los asientos.
+     * @param origen la ubicación de origen.
+     * @param destino la ubicación de destino.
+     * @param bus el bus asignado a la ruta.
+     * @return el precio total del viaje.
+     */
     public int calcularPrecioTotal(Ubicaciones origen, Ubicaciones destino, Bus bus) {
         int precioBase = calcularPrecioBase(origen, destino);
         int precioTotal = precioBase;

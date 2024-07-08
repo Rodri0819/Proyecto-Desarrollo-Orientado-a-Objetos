@@ -13,6 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * PanelCliente es un panel que gestiona la interfaz de usuario para la reserva de pasajes por parte de los clientes.
+ */
 public class PanelCliente extends JPanel {
     private JPanel desde, hasta, dia, ruta;
     private JComboBox<Ubicaciones> comboBoxDesde, comboBoxHasta;
@@ -39,8 +42,12 @@ public class PanelCliente extends JPanel {
     private JButton botonConfirmarReserva;
     private JButton botonVolver;
 
+    /**
+     * Constructor de PanelCliente.
+     * Inicializa los componentes del panel y configura los paneles internos.
+     */
     public PanelCliente() {
-        baseDeDatos = BaseDeDatos.getInstance(); // Correcto: Usa el método Singleton para obtener la instancia
+        baseDeDatos = BaseDeDatos.getInstance();
         configurarPanel();
         agregarPanel1();
         agregarPanel2();
@@ -48,7 +55,7 @@ public class PanelCliente extends JPanel {
         agregarPanel4();
         mostrarPanel1();
 
-        // Listenner para los JBox
+        // Listener para los JComboBox
         comboBoxDesde.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,23 +71,26 @@ public class PanelCliente extends JPanel {
         });
     }
 
+    /**
+     * Actualiza las etiquetas de la ruta seleccionada y los precios según las ubicaciones seleccionadas.
+     */
     private void actualizarLabelsRuta() {
         Ubicaciones origen = (Ubicaciones) comboBoxDesde.getSelectedItem();
         Ubicaciones destino = (Ubicaciones) comboBoxHasta.getSelectedItem();
-        int semiprecio = RutaFactory.calcularPrecioBase(origen, destino)+2000;
-        int salonprecio = RutaFactory.calcularPrecioBase(origen, destino)+4000;
+        int semiprecio = RutaFactory.calcularPrecioBase(origen, destino) + 2000;
+        int salonprecio = RutaFactory.calcularPrecioBase(origen, destino) + 4000;
 
-        if (origen != destino){
+        if (origen != destino) {
             if (origen != null) {
                 origenLabelText.setText(origen.toString());
             }
 
             if (destino != null) {
                 destinoLabelText.setText(destino.toString());
-                semicamaLabelText.setText("$"+ semiprecio);
-                saloncamaLabelText.setText("$"+ salonprecio);
+                semicamaLabelText.setText("$" + semiprecio);
+                saloncamaLabelText.setText("$" + salonprecio);
             }
-        }else{
+        } else {
             origenLabelText.setText(origen.toString());
             destinoLabelText.setText(destino.toString());
             semicamaLabelText.setText("Cambie la ruta");
@@ -88,6 +98,9 @@ public class PanelCliente extends JPanel {
         }
     }
 
+    /**
+     * Configura el panel principal y establece su layout.
+     */
     private void configurarPanel() {
         setBackground(new Color(64, 164, 107));
         setPreferredSize(new Dimension(600, 900));
@@ -95,6 +108,9 @@ public class PanelCliente extends JPanel {
         panelActual = "Panel1"; // Inicializa el estado actual del panel
     }
 
+    /**
+     * Agrega el primer panel (selección de ubicaciones y fecha) al panel principal.
+     */
     private void agregarPanel1() {
         panel1 = new JPanel();
         panel1.setLayout(null);
@@ -118,6 +134,9 @@ public class PanelCliente extends JPanel {
         add(panel1, "Panel1");
     }
 
+    /**
+     * Agrega el subpanel para la selección de la ubicación de origen.
+     */
     private void agregarPanelDesde() {
         desde = new JPanel();
         desde.setLayout(null);
@@ -135,6 +154,9 @@ public class PanelCliente extends JPanel {
         desde.add(comboBoxDesde);
     }
 
+    /**
+     * Agrega el subpanel para la selección de la ubicación de destino.
+     */
     private void agregarPanelHasta() {
         hasta = new JPanel();
         hasta.setLayout(null);
@@ -152,6 +174,9 @@ public class PanelCliente extends JPanel {
         hasta.add(comboBoxHasta);
     }
 
+    /**
+     * Agrega el subpanel para la selección de la fecha del viaje.
+     */
     private void agregarPanelDia() {
         dia = new JPanel();
         dia.setLayout(null);
@@ -170,8 +195,9 @@ public class PanelCliente extends JPanel {
         dia.add(dateChooser);
     }
 
-
-
+    /**
+     * Agrega el subpanel para mostrar la ruta seleccionada y los precios.
+     */
     private void agregarPanelRutaSeleccionada() {
         ruta = new JPanel();
         ruta.setLayout(null);
@@ -234,11 +260,18 @@ public class PanelCliente extends JPanel {
         ruta.add(saloncamaLabelText);
     }
 
-
+    /**
+     * Obtiene la fecha seleccionada por el usuario.
+     *
+     * @return la fecha seleccionada.
+     */
     public Date getFechaSeleccionada() {
         return dateChooser.getDate();
     }
 
+    /**
+     * Agrega el segundo panel (visualización de rutas disponibles) al panel principal.
+     */
     private void agregarPanel2() {
         panel2 = new JPanel();
         panel2.setLayout(null);
@@ -285,6 +318,9 @@ public class PanelCliente extends JPanel {
         });
     }
 
+    /**
+     * Agrega el tercer panel (visualización de asientos disponibles) al panel principal.
+     */
     private void agregarPanel3() {
         panel3 = new JPanel();
         panel3.setLayout(null);
@@ -313,6 +349,9 @@ public class PanelCliente extends JPanel {
         add(panel3, "Panel3");
     }
 
+    /**
+     * Agrega el cuarto panel (formulario de reserva de pasajes) al panel principal.
+     */
     private void agregarPanel4() {
         panel4 = new JPanel();
         panel4.setLayout(null);
@@ -394,13 +433,12 @@ public class PanelCliente extends JPanel {
 
         botonConfirmarReserva = new JButton("Confirmar Reserva");
         botonConfirmarReserva.setFont(new Font("Arial", Font.BOLD, 20));
-        botonConfirmarReserva.setBounds(238, 650, 300, 40); // Ajustar el ancho y la altura del botón
+        botonConfirmarReserva.setBounds(238, 650, 300, 40);
         botonConfirmarReserva.setBackground(new Color(124, 232, 153));
         botonConfirmarReserva.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 confirmarReserva();
-
             }
         });
         panel4.add(botonConfirmarReserva);
@@ -420,18 +458,31 @@ public class PanelCliente extends JPanel {
         add(panel4, "Panel4");
     }
 
+    /**
+     * Establece el asiento seleccionado y actualiza el precio y las etiquetas correspondientes.
+     *
+     * @param asiento el asiento seleccionado.
+     */
     public void setAsientoSeleccionado(Asiento asiento) {
         this.asientoSeleccionado = asiento;
         calcularPrecio(asiento);
         actualizarEtiquetas();
     }
 
+    /**
+     * Actualiza las etiquetas del tipo de asiento.
+     */
     private void actualizarEtiquetas() {
         if (asientoSeleccionado != null) {
             TipoAsientoLabel.setText("Asiento: " + asientoSeleccionado.getCategoria());
         }
     }
 
+    /**
+     * Calcula el precio total del pasaje según el asiento seleccionado y la ruta.
+     *
+     * @param asiento el asiento seleccionado.
+     */
     private void calcularPrecio(Asiento asiento) {
         if (rutaSeleccionada != null) {
             int precioBase = rutaSeleccionada.getPrecio();
@@ -441,7 +492,18 @@ public class PanelCliente extends JPanel {
         }
     }
 
-
+    /**
+     * Valida los datos ingresados por el cliente en el formulario.
+     *
+     * @param nombre     el nombre del cliente.
+     * @param apellido   el apellido del cliente.
+     * @param rut        el RUT del cliente.
+     * @param email      el correo electrónico del cliente.
+     * @param tarjeta    el número de tarjeta del cliente.
+     * @param caducidad  la fecha de caducidad de la tarjeta.
+     * @param cvv        el código CVV de la tarjeta.
+     * @return true si todos los datos son válidos, false de lo contrario.
+     */
     private boolean validarDatosCliente(String nombre, String apellido, String rut, String email, String tarjeta, String caducidad, String cvv) {
         // Validación de nombre y apellido
         if (nombre.isEmpty() || apellido.isEmpty()) {
@@ -491,6 +553,13 @@ public class PanelCliente extends JPanel {
 
         return true;
     }
+
+    /**
+     * Valida el RUT ingresado.
+     *
+     * @param rut el RUT ingresado.
+     * @return true si el RUT es válido, false de lo contrario.
+     */
     private boolean validarRUT(String rut) {
         try {
             rut = rut.toUpperCase();
@@ -509,6 +578,10 @@ public class PanelCliente extends JPanel {
         }
     }
 
+    /**
+     * Confirma la reserva de un pasaje.
+     * Valida los datos del cliente y genera un informe del pasaje.
+     */
     private void confirmarReserva() {
         if (asientoSeleccionado != null) {
             String nombre = nombreField.getText();
@@ -530,8 +603,11 @@ public class PanelCliente extends JPanel {
         }
     }
 
-
-
+    /**
+     * Agrega un botón para revisar el itinerario y busca rutas según las ubicaciones y la fecha seleccionada.
+     *
+     * @param panel el panel al que se agregará el botón.
+     */
     private void agregarBotonItinerario(JPanel panel) {
         JButton itinerario = new JButton("Revisar Itinerario");
         itinerario.setFont(new Font("Arial", Font.BOLD, 20));
@@ -561,12 +637,18 @@ public class PanelCliente extends JPanel {
         });
     }
 
+    /**
+     * Muestra el primer panel (selección de ubicaciones y fecha).
+     */
     private void mostrarPanel1() {
         CardLayout cl = (CardLayout) getLayout();
         cl.show(this, "Panel1");
         panelActual = "Panel1";
     }
 
+    /**
+     * Muestra el segundo panel (visualización de rutas disponibles) y actualiza la tabla de rutas.
+     */
     private void mostrarPanel2() {
         actualizarTablaRutas();
         CardLayout cl = (CardLayout) getLayout();
@@ -574,27 +656,30 @@ public class PanelCliente extends JPanel {
         panelActual = "Panel2";
     }
 
+    /**
+     * Actualiza la tabla de rutas disponibles según las ubicaciones y la fecha seleccionada.
+     */
     private void actualizarTablaRutas() {
-        // Asumimos que tienes métodos para obtener las ubicaciones y la fecha actual seleccionada por el usuario
-        Ubicaciones origen = getUbicacionDesde(); // Método que obtiene la ubicación de origen seleccionada por el usuario
-        Ubicaciones destino = getUbicacionHasta(); // Método que obtiene la ubicación de destino seleccionada por el usuario
-        Date fecha = getFechaSeleccionada(); // Método que obtiene la fecha seleccionada por el usuario
+        Ubicaciones origen = getUbicacionDesde();
+        Ubicaciones destino = getUbicacionHasta();
+        Date fecha = getFechaSeleccionada();
 
-        // Verifica que origen, destino y fecha no sean nulos antes de hacer la llamada
         if (origen != null && destino != null && fecha != null) {
             List<Ruta> rutas = baseDeDatos.obtenerRutas(origen, destino, fecha);
             mostrarRutas(rutas);
         } else {
-            // Manejo de caso donde alguno de los valores necesarios es nulo
             JOptionPane.showMessageDialog(this, "Debe seleccionar origen, destino y fecha para actualizar las rutas.");
         }
     }
 
+    /**
+     * Muestra el tercer panel (visualización de asientos disponibles) y actualiza los asientos disponibles según la ruta seleccionada.
+     */
     private void mostrarPanel3() {
         if (rutaSeleccionada != null) {
             List<Asiento> asientos = rutaSeleccionada.getBus().getAsientos();
-            Bus bus = rutaSeleccionada.getBus(); // Obtener el objeto Bus
-            Asientos asientosPanel = new Asientos(asientos, bus, this); // Pasar la lista de asientos y el objeto Bus
+            Bus bus = rutaSeleccionada.getBus();
+            Asientos asientosPanel = new Asientos(asientos, bus, this);
             panel3.removeAll();
             asientosPanel.setBounds(100, 50, 600, 600);
             asientosPanel.setBackground(new Color(173, 216, 230));
@@ -644,20 +729,38 @@ public class PanelCliente extends JPanel {
         panelActual = "Panel3";
     }
 
+    /**
+     * Muestra el cuarto panel (formulario de reserva de pasajes).
+     */
     public void mostrarPanel4() {
         CardLayout cl = (CardLayout) getLayout();
         cl.show(this, "Panel4");
         panelActual = "Panel4";
     }
 
+    /**
+     * Obtiene la ubicación de origen seleccionada.
+     *
+     * @return la ubicación de origen seleccionada.
+     */
     public Ubicaciones getUbicacionDesde() {
         return (Ubicaciones) comboBoxDesde.getSelectedItem();
     }
 
+    /**
+     * Obtiene la ubicación de destino seleccionada.
+     *
+     * @return la ubicación de destino seleccionada.
+     */
     public Ubicaciones getUbicacionHasta() {
         return (Ubicaciones) comboBoxHasta.getSelectedItem();
     }
 
+    /**
+     * Muestra las rutas disponibles en una tabla.
+     *
+     * @param rutas la lista de rutas disponibles.
+     */
     private void mostrarRutas(List<Ruta> rutas) {
         String[] columnNames = {"Origen", "Destino", "Fecha", "Hora", "Bus"};
         Object[][] data = new Object[rutas.size()][5];
@@ -668,7 +771,7 @@ public class PanelCliente extends JPanel {
             data[i][0] = ruta.getOrigen();
             data[i][1] = ruta.getDestino();
             data[i][2] = dateFormat.format(ruta.getFecha());
-            data[i][3] = ruta.getHoraFormateada(); // Usar getHoraFormateada para obtener la hora formateada
+            data[i][3] = ruta.getHoraFormateada();
             data[i][4] = ruta.getBus().getId();
         }
 
