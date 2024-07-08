@@ -1,13 +1,10 @@
 package org.example.Modelo;
 
-import org.example.Vista.*;
-
-
 public class Cliente {
-    String nombre;
-    String apellido;
-    String rut;
-    String email;
+   private String nombre;
+   private String apellido;
+   private String rut;
+   private String email;
 
     public Cliente(String nombre, String apellido, String rut, String email) {
         this.nombre = nombre;

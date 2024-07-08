@@ -17,6 +17,15 @@ public class RutaFactory {
     }
 
     public List<Ruta> crearRutas(Ubicaciones origen, Ubicaciones destino, int dias) {
+        if (origen == null || destino == null) {
+            throw new IllegalArgumentException("Origen y destino no pueden ser nulos");
+        }
+        if (dias <= 0) {
+            throw new IllegalArgumentException("El número de días debe ser positivo y mayor que cero");
+        }
+        if (buses.isEmpty()) {
+            throw new IllegalStateException("No hay buses disponibles para crear rutas");
+        }
         List<Ruta> rutas = new ArrayList<>();
         LocalTime start = LocalTime.of(8, 0); // Hora de inicio general
         LocalTime end = LocalTime.of(22, 0); // Hora de fin

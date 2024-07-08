@@ -35,7 +35,6 @@ public class PanelCliente extends JPanel {
     private JTextField tarjetaField;
     private JTextField caducidadField;
     private JTextField cvvField;
-    private JButton guardarButton;
     private Asiento asientoSeleccionado;
     private JButton botonConfirmarReserva;
     private JButton botonVolver;
@@ -261,6 +260,7 @@ public class PanelCliente extends JPanel {
         JButton botonVolverPanel2 = new JButton("Volver");
         botonVolverPanel2.setFont(new Font("Arial", Font.BOLD, 20));
         botonVolverPanel2.setBounds(288, 700, 200, 30);
+        botonVolverPanel2.setBackground(new Color(255, 76, 76));
         botonVolverPanel2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -301,6 +301,7 @@ public class PanelCliente extends JPanel {
         JButton botonVolverPanel3 = new JButton("Volver");
         botonVolverPanel3.setFont(new Font("Arial", Font.BOLD, 20));
         botonVolverPanel3.setBounds(288, 700, 200, 30);
+        botonVolverPanel3.setBackground(new Color(255, 76, 76));
         botonVolverPanel3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -394,6 +395,7 @@ public class PanelCliente extends JPanel {
         botonConfirmarReserva = new JButton("Confirmar Reserva");
         botonConfirmarReserva.setFont(new Font("Arial", Font.BOLD, 20));
         botonConfirmarReserva.setBounds(238, 650, 300, 40); // Ajustar el ancho y la altura del botón
+        botonConfirmarReserva.setBackground(new Color(124, 232, 153));
         botonConfirmarReserva.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -406,6 +408,7 @@ public class PanelCliente extends JPanel {
         JButton botonVolverPanel4 = new JButton("Volver");
         botonVolverPanel4.setFont(new Font("Arial", Font.BOLD, 20));
         botonVolverPanel4.setBounds(288, 700, 200, 30);
+        botonVolverPanel4.setBackground(new Color(255, 76, 76));
         botonVolverPanel4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -521,8 +524,6 @@ public class PanelCliente extends JPanel {
                 pasaje.generarInforme();
                 JOptionPane.showMessageDialog(panel4, "Reserva confirmada.");
                 mostrarPanel3();
-            } else {
-                JOptionPane.showMessageDialog(panel4, "No se ha seleccionado ningún asiento.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(panel4, "No se ha seleccionado ningún asiento.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -535,6 +536,7 @@ public class PanelCliente extends JPanel {
         JButton itinerario = new JButton("Revisar Itinerario");
         itinerario.setFont(new Font("Arial", Font.BOLD, 20));
         itinerario.setBounds(288, 700, 200, 30);
+        itinerario.setBackground(new Color(253, 221, 175));
         panel.add(itinerario);
 
         itinerario.addActionListener(new ActionListener() {
@@ -554,26 +556,6 @@ public class PanelCliente extends JPanel {
                     } else {
                         JOptionPane.showMessageDialog(PanelCliente.this, "No se encontraron rutas para la selección.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                }
-            }
-        });
-    }
-
-    private void agregarBotonVolver(JPanel panel) {
-        botonVolver = new JButton("Volver");
-        botonVolver.setFont(new Font("Arial", Font.BOLD, 20));
-        botonVolver.setBounds(288, 700, 200, 30);
-        panel.add(botonVolver);
-
-        botonVolver.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (panelActual.equals("Panel4")) {
-                    mostrarPanel3();
-                } else if (panelActual.equals("Panel3")) {
-                    mostrarPanel2();
-                } else if (panelActual.equals("Panel2")) {
-                    mostrarPanel1();
                 }
             }
         });
@@ -644,6 +626,7 @@ public class PanelCliente extends JPanel {
             JButton botonVolverPanel3 = new JButton("Volver");
             botonVolverPanel3.setFont(new Font("Arial", Font.BOLD, 20));
             botonVolverPanel3.setBounds(288, 700, 200, 30);
+            botonVolverPanel3.setBackground(new Color(255, 76, 76));
             botonVolverPanel3.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

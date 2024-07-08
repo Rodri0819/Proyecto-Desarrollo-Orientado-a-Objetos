@@ -1,7 +1,6 @@
 package org.example.Vista;
 
 import org.example.Modelo.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalTime;

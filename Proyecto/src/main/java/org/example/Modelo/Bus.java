@@ -1,17 +1,16 @@
 package org.example.Modelo;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Bus implements Cloneable {
     private int capacidad;
-    private String id;
+    private String tipo;
     private List<Asiento> asientos;
 
-    public Bus(int capacidad, String id) {
+    public Bus(int capacidad, String tipo) {
         this.capacidad = capacidad;
-        this.id = id;
+        this.tipo = tipo;
         this.asientos = new ArrayList<>();
     }
 
@@ -28,7 +27,7 @@ public abstract class Bus implements Cloneable {
     }
 
     public String getId() {
-        return id;
+        return tipo;
     }
 
     public List<Asiento> getAsientos() {
@@ -69,7 +68,7 @@ public abstract class Bus implements Cloneable {
             }
             return clonedBus;
         } catch (CloneNotSupportedException e) {
-            throw new RuntimeException("Clone not supported", e);
+            throw new RuntimeException("Error, no se pudo clonar", e);
         }
     }
 }

@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-public class Ruta {
+public class  Ruta {
     private Ubicaciones origen;
     private Ubicaciones destino;
     private Date fecha;

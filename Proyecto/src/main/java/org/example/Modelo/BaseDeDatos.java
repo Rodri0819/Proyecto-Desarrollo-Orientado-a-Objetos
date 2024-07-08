@@ -32,17 +32,25 @@ public class BaseDeDatos {
     }
 
     private void cargarDatos() {
-        // Crear buses
-        Bus bus1 = new SingleBus(28, "DX69-4");
-        Bus bus2 = new DoubleBus(40, "DXDY-5");
+            try {
+                // Intentar cargar buses
+                Bus bus1 = new SingleBus(24, "MicroBus");
+                Bus bus2 = new DoubleBus(30, "Bus");
+                Bus bus3 = new SingleBus(40, "Articulado");
 
-        buses.add(bus1);
-        buses.add(bus2);
-    }
+                buses.add(bus1);
+                buses.add(bus2);
+                buses.add(bus3);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al cargar datos de buses", e);
+            }
+        }
 
-    private void generarRutas() {
+
+        private void generarRutas() {
         rutas.addAll(rutaFactory.crearRutas(Ubicaciones.LOS_ANGELES, Ubicaciones.SANTIAGO, 7));
         rutas.addAll(rutaFactory.crearRutas(Ubicaciones.LOS_ANGELES, Ubicaciones.CONCEPCION, 7));
+        rutas.addAll(rutaFactory.crearRutas(Ubicaciones.LOS_ANGELES, Ubicaciones.CURANILAHUE, 7));
     }
 
     public List<Ruta> obtenerRutas(Ubicaciones origen, Ubicaciones destino, Date fecha) {
@@ -73,6 +81,12 @@ public class BaseDeDatos {
     }
 
     public void agregarRuta(Ruta ruta) {
+        if (ruta == null) {
+            throw new IllegalArgumentException("La ruta no puede ser nula");
+        }
+        if (rutas.contains(ruta)) {
+            throw new IllegalStateException("La ruta ya existe");
+        }
         rutas.add(ruta);
     }
 

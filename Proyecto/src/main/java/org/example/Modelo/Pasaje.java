@@ -1,6 +1,5 @@
 package org.example.Modelo;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -10,7 +9,6 @@ public class Pasaje {
     private String nombreArchivo;
     private Cliente cliente;
     private Asiento asientoSeleccionado;
-    private String rutaArchivo;
 
     public Pasaje(Ruta ruta, Cliente cliente, Asiento asientoSeleccionado, String nombreArchivo) {
         this.ruta = ruta;
@@ -36,16 +34,6 @@ public class Pasaje {
             writer.write("Precio Total: " + ruta.getPrecio() + "\n\n");
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-    public String getRutaArchivo() {
-        return rutaArchivo;
-    }
-    public void eliminarArchivo() {
-
-        File archivo = new File(rutaArchivo);
-        if (archivo.exists()) {
-            archivo.delete();
         }
     }
 }

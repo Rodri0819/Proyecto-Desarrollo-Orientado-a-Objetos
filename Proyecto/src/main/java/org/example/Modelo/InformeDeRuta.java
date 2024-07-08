@@ -15,12 +15,6 @@ public class InformeDeRuta {
         this.nombreArchivo = nombreArchivo;
     }
 
-    // Nuevo constructor para buses
-    public InformeDeRuta(Bus bus, String nombreArchivo) {
-        this.bus = bus;
-        this.nombreArchivo = nombreArchivo;
-    }
-
     public void generarInforme() throws IOException {
         try (FileWriter writer = new FileWriter(nombreArchivo)) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -66,6 +60,4 @@ public class InformeDeRuta {
             writer.write("\n");
         }
     }
-
-
 }
